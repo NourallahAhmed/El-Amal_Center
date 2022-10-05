@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "282793659192",
+    "project_id": "alamalcenter-57cdf",
+    "storage_bucket": "alamalcenter-57cdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282793659192:android:0d0d88a23b71161bda4fcd",
+        "android_client_info": {
+          "package_name": "com.example.untitled"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282793659192-e6oeuu9maeqgnqtleh86tencn97bo3tu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPcJwNBQHKuRd53Pvx52H86XW7Kufvdg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282793659192-e6oeuu9maeqgnqtleh86tencn97bo3tu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
