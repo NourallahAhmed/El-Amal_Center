@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:untitled/UI/AddingClient/View/Component/AddingClientPages.dart';
 
@@ -11,8 +13,13 @@ class AddingClientScreen extends StatefulWidget {
 }
 
 class _AddingClientScreenState extends State<AddingClientScreen> {
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    print(DateTime.now().millisecondsSinceEpoch);
     final screenSize = MediaQuery
         .of(context)
         .size;

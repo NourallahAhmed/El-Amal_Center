@@ -104,3 +104,5 @@ flutter:
   assets:
     - assets/images/facebook.png
     - assets/images/google.png
+    - assets/images/man.png
+    - assets/images/woman.png

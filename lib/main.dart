@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Services/MyProvider.dart';
 
 import 'UI/HomePage/View/Component/HomePage.dart';
-import 'UI/HomePage/View/homePageScreen.dart';
+import 'UI/HomePage/View/homeScreen.dart';
 import 'UI/LoginPage/LoginView/LoginScreen.dart';
 import 'utils/Constants.dart';
 
@@ -22,9 +24,18 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final String? emailSaved = prefs.getString('email');
   final String? passwordSaved = prefs.getString('password');
+  print(passwordSaved);
 
+  runApp(
+      /*ChangeNotifierProvider(
+          create: (context) => MyProvider.getInstance(),
+          child:
+          */
 
-  runApp( MyApp(email: emailSaved , pass: passwordSaved));
+          MyApp(email: emailSaved , pass: passwordSaved)
+      // )
+  );
+
 }
 
 class MyApp extends StatelessWidget {
@@ -50,7 +61,7 @@ class MyApp extends StatelessWidget {
       ),
       ),
       home:
-          this.email != null  && this.pass != null ? const HomePageScreen() : const LoginScreen(),
+          this.email != null && this.pass != null ? const HomePageScreen() : const LoginScreen(),
     );
   }
 }

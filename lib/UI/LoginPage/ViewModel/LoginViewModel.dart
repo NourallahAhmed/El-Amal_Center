@@ -20,11 +20,9 @@ class LoginViewModel {
 
   //Store the name of the therapist in the RealTimeDB
 
-
-  FirebaseDatabase _database = FirebaseDatabase.instance;
-
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
   //todo store the gmail too when it works
-  DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/");
+  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/");
 
   final Firebase _firebase = Firebase();
   final Google _google = Google();
@@ -44,41 +42,26 @@ class LoginViewModel {
     if (erroeMsg.isEmpty){
       // Obtain shared preferences.
       storeData(email , password);
+      addToTherapist(email);
     }
 
   }
 
-  Future<void> storeData(String email , String password) async {
-    var id = UniqueKey().hashCode.toString();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("email", email);
-    await prefs.setString("password", password);
-    await prefs.setString("uniquekey", id);
-
-    DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/${id}");
-
-    //Store the email in the RealTimeDB
-    await _databaseReference.set({
-      "name" :  email
-    });
-  }
-
-
   Future<void> login( String email , String password) async {
     print("Login");
+
     erroeMsg = "";
-    UserCredential userCredential = await _auth.signInWithEmailAndPassword
-      (email: email, password: password)
+
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password)
         .catchError( ( error ) {
-      print(error);
-      erroeMsg = error.toString();
+        print(error);
+        erroeMsg = error.toString();
     });
 
-  }
+    print("toStored");
+    storeData(email , password);
+    print("AfterStored");
 
-
-  String getError() {
-    return  erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";
   }
 
   Future<void> loginGmail () async {
@@ -87,8 +70,41 @@ class LoginViewModel {
 
   }
 
+  Future<void> logOut() async{
 
-  // Future<void> loginByGmail() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.clear();
+    print("logout");
+    print(await prefs.get("email"));
+    // await prefs.setString("email", "");
+    // await prefs.setString("password", "");
+    // await prefs.setString("uniquekey", "");
+    await FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> addToTherapist(String email) async{
+    DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/");
+
+    //Store the email in the RealTimeDB
+    await _databaseReference.push().set({
+      "name" :  email
+    });
+  }
+
+  Future<void> storeData(String email , String password) async {
+    print("StoreData");
+    var id = UniqueKey().hashCode.toString();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("email", email);
+    await prefs.setString("password", password);
+    await prefs.setString("uniquekey", id);
+  }
+
+  String getError() {
+    return  erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";
+  }
+// Future<void> loginByGmail() async {
   //   print("Login By Gmail");
   //
   //   GoogleSignInAccount? googleSignInAccount = await _googleSignin.signIn().catchError( (e) => print("error signin ${e}"));

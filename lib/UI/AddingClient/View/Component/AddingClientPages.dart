@@ -14,9 +14,11 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   var _addingVM = AddingViewModel();
   var time = DateTime.now();
   var items = ["one" , "two" , "Speech Therapy"];
-  var Therapist = ["Nouran" , "two" , "Speech Therapy"];
+
+
+  var _listOftherapist = [];
   var _clientCase = "Speech Therapy";
-  var _clientTherapist = "Nouran";
+  var _clientTherapist = "";
   var _listOfTime = [];
   final _clientNameController = TextEditingController();
   final _clientAgeController = TextEditingController();
@@ -63,7 +65,6 @@ class _AddingClientPagesState extends State<AddingClientPages> {
         padding: const EdgeInsets.all(9.0),
 
         child: DropdownButton(
-
             isExpanded:true,
           borderRadius: BorderRadius.circular(20),
 
@@ -87,6 +88,14 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   }
 
   Widget therapistDropDownList(List<dynamic> items ){
+
+
+    setState((){
+      _clientTherapist =  items.isNotEmpty ? items[0] : "";
+
+    });
+
+
     return
       Padding(
         padding: const EdgeInsets.all(9.0),
@@ -140,32 +149,40 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
   @override
   initState(){
-    // _addingVM.getAllTherapist();
+    _addingVM.getAllTherapist();
+
+    setState((){
+
+
+      ///Provider
+      _listOftherapist = _addingVM.getListOfTherapist();
+
+
+      _clientTherapist =  _listOftherapist.isNotEmpty?  _listOftherapist[0] : "" ;
+    });
+
   }
   
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: double.infinity,
       child: SingleChildScrollView(
         child: Column(
 
           children: [
-
             //Name of the client
             inputFeild("Yasser", Icons.person, _clientNameController, TextInputType.name),
 
-
             //Age of the Client
             inputFeild("12", Icons.person, _clientAgeController, TextInputType.number),
-
 
             //Case of the Client
             caseDropDownList(items),
 
             //therapist
 
-            therapistDropDownList(Therapist),
+            therapistDropDownList(_listOftherapist.isNotEmpty? _listOftherapist : []),
 
           //Price
           inputFeild("120", Icons.money, _clientPriceController, TextInputType.number),

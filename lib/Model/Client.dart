@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Client {
   int id;
@@ -7,19 +8,25 @@ class Client {
   int age;
   String caseName;
   DateTime startDate;
-  List<DateTime> sessions;
-  int sessionDurration;
+  DateTime storedAt;
+  String storedBy;
+  // List<DateTime> sessions;
+  int Durration;
   int price;
+  String gender;
 
   Client(this.id ,
       {required this.therapist,
       required this.name,
+      required this.storedAt,
+      required this.storedBy,
       this.age = 0,
       required this.startDate,
       this.caseName = '',
-      required this.sessions,
+      this.gender = "male",
+        // this.sessions = [],
       this.price = 0,
-      this.sessionDurration = 30});
+      this.Durration = 30});
 
   //serialization
 
@@ -30,12 +37,33 @@ Map<String, dynamic> toJson() {
     "name": name,
     "age": age,
     "caseName": caseName,
-    "sessions": sessions,
+    "storedBy": storedBy,
+    "storedAt": storedAt,
+    // "sessions": sessions,
     "startDate": startDate.millisecondsSinceEpoch,
-    "sessions": sessions,
     "price": price,
-    "sessionDurration": sessionDurration ,
+    "Durration": Durration ,
+    "Gender" : gender
   };
 }
+
+///from snapshot
+
+
+  factory Client.fromMap(Map<dynamic, dynamic> map) {
+    return Client(0,
+        therapist: map["Therapist"],
+        name: map["name"],
+        gender: map['Gender'],
+        storedAt: DateTime.fromMillisecondsSinceEpoch(map["storedAt"]) ,
+        storedBy:  map["storedBy"],
+        startDate: DateTime.fromMillisecondsSinceEpoch(map["startDay"]),
+        // sessions:  map["SesionDays"] as Map,
+        price:  map["price"],
+        Durration:  map["Durration"],
+        caseName: map["Case"],
+        age: map["Age"],
+    );
+  }
 }
 
