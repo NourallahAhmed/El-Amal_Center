@@ -47,7 +47,8 @@ dependencies:
 
   google_sign_in:
   shared_preferences: ^2.0.15
-
+  firebase_database: ^9.1.6
+  http:
 dev_dependencies:
   flutter_test:
     sdk: flutter

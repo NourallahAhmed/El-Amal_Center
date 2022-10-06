@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/HelperFunctions.dart';
-import '../animations/ChangeScreenAnimation.dart';
-import 'bottom_text.dart';
-import 'top_text.dart';
+import '../../../HomePage/View/homePageScreen.dart';
+
 
 
 enum Screens {
@@ -27,7 +27,13 @@ enum txtbutton<String>{
   LogIn,
 
 }
+
+
+
 class _Login_ContentState extends State<Login_Content>  with TickerProviderStateMixin {
+
+
+
   //todo ViewModel
 
   var loginVM = LoginViewModel();
@@ -37,6 +43,8 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
   var userNameController = TextEditingController();
   var passIcon = Icon(Icons.visibility_off);
   var obscure = true;
+
+  var result = "";
   //todo input design
 
   Widget inputField(String hint, IconData iconData , TextEditingController txtController , TextInputType keyType) {
@@ -92,28 +100,54 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: ()  {
+
+
+          //todo SignUP
           if (title == txtbutton.SignUp) {
 
-
+            print("signup");
             loginVM.createAccount(emailController.text , passwordController.text );
-            print(loginVM.erroeMsg);
 
-            emailController.clear();
-            userNameController.clear();
-            passwordController.clear();
+
+            setState(() {
+
+              result = loginVM.getError();
+              print("result");
+            print(result);
+            });
+
+            if (  result.isEmpty ){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageScreen()));
+              emailController.clear();
+              userNameController.clear();
+              passwordController.clear();
+            }
           }
           else {
+
+
+            //MARK : already have an account
+
             if(title == txtbutton.LogIn){
-              loginVM.login(emailController.text , passwordController.text );
-              print(loginVM.erroeMsg);
 
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(loginVM.erroeMsg)));
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("No link available"),
-                  ));
+              loginVM.login(
+                  emailController.text, passwordController.text);
+
+              setState(() {
+
+                result = loginVM.getError();
+
+              });
+
+
+
+
+
+              result.isEmpty ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageScreen())) : null;
+
+
               emailController.clear();
               userNameController.clear();
               passwordController.clear();
@@ -295,6 +329,10 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
   @override
   initState() {
 
+
+
+
+
     createAccountContent = [
       inputField('Username', Icons.person_outline , userNameController , TextInputType.name),
       inputField('Email', Icons.mail_outline , emailController , TextInputType.emailAddress),
@@ -353,7 +391,7 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
                     isCreate ?
                     loginContent : createAccountContent
             ),
-              Text(loginVM.erroeMsg),
+             Text(result) ,
             ]
           ),
         );

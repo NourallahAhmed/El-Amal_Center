@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'UI/HomePage/View/HomePage.dart';
+import 'UI/HomePage/View/Component/HomePage.dart';
+import 'UI/HomePage/View/homePageScreen.dart';
 import 'UI/LoginPage/LoginView/LoginScreen.dart';
 import 'utils/Constants.dart';
 
@@ -23,7 +24,6 @@ void main() async {
   final String? passwordSaved = prefs.getString('password');
 
 
-
   runApp( MyApp(email: emailSaved , pass: passwordSaved));
 }
 
@@ -36,6 +36,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    print("emailSaved ${email}" );
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
       ),
       ),
       home:
-          this.email != null  && this.pass != null ? HomePage(email: email) : const LoginScreen(),
+          this.email != null  && this.pass != null ? const HomePageScreen() : const LoginScreen(),
     );
   }
 }
