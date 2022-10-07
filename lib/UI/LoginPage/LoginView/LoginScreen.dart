@@ -1,6 +1,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 
 import 'Component/CenterWidgets/centerWidegt.dart';
 import 'Component/LoginContent.dart';
@@ -22,8 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenSize = MediaQuery
         .of(context)
         .size;
-
-    return Scaffold(
+   return ChangeNotifierProvider(
+        create: (context) => LoginViewModel(),
+    child: Scaffold(
         body: Stack(
           children: [
             Positioned(
@@ -40,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const Login_Content(),
           ],
         ),
-
+    )
     );
   }
 }

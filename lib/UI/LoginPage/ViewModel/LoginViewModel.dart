@@ -6,14 +6,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/utils/Shared.dart';
 
 import 'FireBase.dart';
 import 'Google.dart';
 
-class LoginViewModel {
+class LoginViewModel  with ChangeNotifier{
 
 
   var erroeMsg  = "" ;
+  var isStored  = false ;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   // final GoogleSignIn _googleSignin = GoogleSignIn();
 
@@ -49,18 +51,18 @@ class LoginViewModel {
 
   Future<void> login( String email , String password) async {
     print("Login");
-
+    var id = UniqueKey().hashCode.toString();
+    final prefs = await SharedPreferences.getInstance();
     erroeMsg = "";
 
     UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password)
         .catchError( ( error ) {
         print(error);
-        erroeMsg = error.toString();
-    });
-    storeData(email , password);
+        erroeMsg = error.toString();});
+      storeData(email, password);
 
   }
-
+  IsStored() => isStored;
   Future<void> loginGmail () async {
     AuthCredential? authCredential = await _google.logIn();
     await _firebase.logIn(authCredential!);
@@ -69,14 +71,11 @@ class LoginViewModel {
 
   Future<void> logOut() async{
 
-    final prefs = await SharedPreferences.getInstance();
 
-    await prefs.clear();
+
+    await  SharedPref.pref.clear();
     print("logout");
-    print(await prefs.get("email"));
-    // await prefs.setString("email", "");
-    // await prefs.setString("password", "");
-    // await prefs.setString("uniquekey", "");
+    print( SharedPref.pref.getString("email"));
     await FirebaseAuth.instance.signOut();
   }
 
@@ -92,10 +91,12 @@ class LoginViewModel {
   Future<void> storeData(String email , String password) async {
     print("StoreData");
     var id = UniqueKey().hashCode.toString();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("email", email);
-    await prefs.setString("password", password);
-    await prefs.setString("uniquekey", id);
+    // final prefs = await SharedPreferences.getInstance();
+    await SharedPref.pref.setString("email", email);
+    await  SharedPref.pref.setString("password", password);
+    await  SharedPref.pref.setString("uniquekey", id);
+    isStored = true;
+    notifyListeners();
   }
 
   String getError() => erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";

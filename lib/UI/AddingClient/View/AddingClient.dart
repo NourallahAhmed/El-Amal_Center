@@ -1,7 +1,9 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/UI/AddingClient/View/Component/AddingClientPages.dart';
+import 'package:untitled/UI/AddingClient/ViewModel/AddingClientVM.dart';
 
 import '../../../utils/HelperFunctions.dart';
 
@@ -24,28 +26,32 @@ class _AddingClientScreenState extends State<AddingClientScreen> {
         .of(context)
         .size;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => AddingViewModel(),
+    child:
+
+      Scaffold(
       appBar:  AppBar(
           title:  Text("El Amal Center"),
       ),
       body: Stack(
         children: [
-          Positioned(
-            top: -390,
-            left: 100,
-            right: -100,
-            child: HelperFunctions.topWidget(screenSize.width),
-          ),
-          Positioned(
-            bottom: -150,
-            left: 90,
-            child: HelperFunctions.bottomWidget(screenSize.width),
-          ),
-          // CenterWidget(size: screenSize),
+          // Positioned(
+          //   top: -390,
+          //   left: 100,
+          //   right: -100,
+          //   child: HelperFunctions.topWidget(screenSize.width),
+          // ),
+          // Positioned(
+          //   bottom: -150,
+          //   left: 90,
+          //   child: HelperFunctions.bottomWidget(screenSize.width),
+          // ),
+          // // CenterWidget(size: screenSize),
           AddingClientPages(),
         ],
       )
-    );
+    ));
 
   }
 }

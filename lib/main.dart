@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Services/MyProvider.dart';
+import 'package:untitled/utils/Shared.dart';
 
 import 'UI/HomePage/View/Component/HomePage.dart';
 import 'UI/HomePage/View/homeScreen.dart';
@@ -21,9 +22,9 @@ void main() async {
 
 
   // Obtain shared preferences.
-  final prefs = await SharedPreferences.getInstance();
-  final String? emailSaved = prefs.getString('email');
-  final String? passwordSaved = prefs.getString('password');
+  final prefs = await SharedPref.getShared();
+  final String? emailSaved = SharedPref.email;
+  final String? passwordSaved = SharedPref.password;
   print(passwordSaved);
 
   runApp(MyApp(email: emailSaved, pass: passwordSaved));

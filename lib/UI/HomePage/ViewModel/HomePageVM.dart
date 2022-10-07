@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Model/Client.dart';
 
+import '../../../utils/Shared.dart';
+
 class HomePageVM with ChangeNotifier {
   //todo fetch the data related to the therpist by email
   final List<Client> listOfAllClients = [];
@@ -12,9 +14,8 @@ class HomePageVM with ChangeNotifier {
 
   Future<void> fetchAllData() async {
     print("Fetch All Data");
-    var shared = await SharedPreferences.getInstance();
 
-    var email = shared.get("email");
+    var email =  SharedPref.email;
 
     final snapshot = await FirebaseDatabase.instance.ref('Client/').get();
 
@@ -31,19 +32,37 @@ class HomePageVM with ChangeNotifier {
 
   void buildTheList( List<Client> clients){
 
+    print("buildList");
+
     //outer Loop over the clients
     clients.forEach((client) {
+
       // inner loop over the sessions for each client
       client.sessions.forEach((session) {
-          print(session.millisecondsSinceEpoch);
-          if (listOfClients.containsKey(DateTime(
-              session.year,session.month, session.day, 00, 0).toLocal())) {
+        if (listOfClients.containsKey(DateTime(session.year,session.month, session.day, 00, 0).toLocal())) {
+          // print("Value");
+          //
+          // print(listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]);
+
+          //
+          // listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]?.map((e) {
+          //   print("name2");
+          //   print(e.name.toString());
+          //
+          //
+          // }
+          // );
+
+
+          if (listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]!.contains(client) == false )
 
             listOfClients.update(
                 DateTime(session.year, session.month,
-                    session.day , 00, 0).toLocal(),
+                    session.day, 00, 0).toLocal(),
                     (value) => value + [client]);
-          } else {
+
+        }
+        else {
             Map<DateTime, List<Client>> instance = {
               DateTime(session.year,session.month,
                   session.day , 00, 0).toLocal(): [

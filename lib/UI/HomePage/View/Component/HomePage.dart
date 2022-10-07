@@ -40,10 +40,11 @@ class _HomePageState extends State<HomePage> {
 
 
     print("initState()");
-     homeVM.fetchAllData();
-      print(selectedDay);
+      homeVM.fetchAllData();
       selectedList = homeVM.listOfAllClients;
       client_List = homeVM.listOfClients;
+      // selectedList = client_List?[_focusedDay] ??[];
+      // _handleData(_focusedDay);
   }
 
   Widget homeCalender(){
@@ -118,27 +119,29 @@ class _HomePageState extends State<HomePage> {
 
               children: [
                 Text(
-                  " ${client.name}",
+                  "${client.name}",
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
 
                 Text(
-                  "Case: ${client.caseName}",
+                  "${client.caseName}",
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
                 Text(
-                  "Age: ${client.age}",
+                  "Therapist: ${client.therapist.substring(0,client.therapist.lastIndexOf("@"))}",
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
                 Text(
                   "Durration: ${client.Durration} min",
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
-                const SizedBox(height: 15,),
-                sessionsView(client.sessions),
+
+
               ],
             ),
 
+            const SizedBox(width: 20,),
+          sessionsView(client.sessions) ,
 
 
            /* Row(
@@ -160,29 +163,24 @@ class _HomePageState extends State<HomePage> {
 
 
     sessions.forEach((session) {
-        print("loop");
-        print(session.toLocal());
-        print(selectedDay);
+        // print("loop");
+        // print(session.toLocal());
+        // print(selectedDay);
       if (session.day == selectedDay.day){
         // sessionsOfTheDay.add(session);
-
-
         var  time =  DateFormat('HH:mm:aa').format(session).toString();
+
+
+
         customRow.add(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
                // const Icon(Icons.alarm),
                // const SizedBox(width: 15,),
                Text("${time}" , style: TextStyle(fontSize: 15),),
-               const SizedBox(width: 15,)
-            ],
-          )
         );
       }
     });
 
-    return Row(
+    return Column(
 
       children: customRow
     );
@@ -199,7 +197,6 @@ class _HomePageState extends State<HomePage> {
     );
 
   }
-
   Widget emptyList(){
     return Center(
       child: Image.network(

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
@@ -117,7 +118,7 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
             print(result);
             });
 
-            if (  result.isEmpty ){
+            if (  result.isEmpty  & loginVM.isStored == true){
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageScreen()));
               emailController.clear();
               userNameController.clear();
@@ -142,11 +143,12 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
               });
 
 
-
-
-
-              result.isEmpty ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageScreen())) : null;
-
+              print("result");
+              print(result.isNotEmpty);
+            if(loginVM.isStored == true) {
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => const HomePageScreen()));
+            }
 
               emailController.clear();
               userNameController.clear();
@@ -324,12 +326,13 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
 
   var isLogin = true;
   var isCreate = false;
+  var isStored = false;
 
 
   @override
   initState() {
 
-
+      isStored = loginVM.isStored;
 
 
 
@@ -363,38 +366,38 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
   @override
   Widget build(BuildContext context) {
     return
-        SingleChildScrollView(
+      Consumer<LoginViewModel>(builder: (context, provider, child) {
+        return SingleChildScrollView(
           child: Column(
-            
-            
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             // crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+              children: [
 
-              const SizedBox(
-                height: 100,
-              ),
-              Text(
-                isLogin
-                    ? 'Create\nAccount'
-                    : 'Welcome\nBack',
-                style: const TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.w600,
+                const SizedBox(
+                  height: 100,
                 ),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Column (
-                children:
+                Text(
+                  isLogin
+                      ? 'Create\nAccount'
+                      : 'Welcome\nBack',
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Column(
+                    children:
                     isCreate ?
                     loginContent : createAccountContent
-            ),
-             Text(result) ,
-            ]
+                ),
+                Text(result),
+              ]
           ),
         );
+      });
 
 
   }
