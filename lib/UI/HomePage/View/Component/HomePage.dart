@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import '../../../../Model/Client.dart';
 import '../../../../utils/Constants.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -113,7 +114,8 @@ class _HomePageState extends State<HomePage> {
               width: 10,
             ),
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
               children: [
                 Text(
                   " ${client.name}",
@@ -132,27 +134,59 @@ class _HomePageState extends State<HomePage> {
                   "Durration: ${client.Durration} min",
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
-
+                const SizedBox(height: 15,),
+                sessionsView(client.sessions),
               ],
             ),
 
-            Row(
-              children: [
-                // client.sessions.map((e) => e = DateTime(DateTime.now().year,))
-              ],
-            ),
-            Row(
+
+
+           /* Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active_outlined)),
               ],
-            )
+            )*/
           ],
         ),
       ),
     );
   }
 
+  Widget sessionsView(List<DateTime>  sessions) {
+
+    List<Widget> customRow = [];
+    var sessionsOfTheDay = [];
+
+
+    sessions.forEach((session) {
+        print("loop");
+        print(session.toLocal());
+        print(selectedDay);
+      if (session.day == selectedDay.day){
+        // sessionsOfTheDay.add(session);
+
+
+        var  time =  DateFormat('HH:mm:aa').format(session).toString();
+        customRow.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+               // const Icon(Icons.alarm),
+               // const SizedBox(width: 15,),
+               Text("${time}" , style: TextStyle(fontSize: 15),),
+               const SizedBox(width: 15,)
+            ],
+          )
+        );
+      }
+    });
+
+    return Row(
+
+      children: customRow
+    );
+  }
   Widget homeList() {
     return ListView.builder(
       padding: const EdgeInsets.all(0.0),
