@@ -23,13 +23,14 @@ class _HomePageState extends State<HomePage> {
 
   late List<Client> selectedList;
 
-  Map<DateTime, List<Client>>? Client_List;
+  Map<DateTime, List<Client>>? client_List;
 
   //todo handle Selection
   void _handleData(date) {
     setState(() {
       selectedDay = date;
-      selectedList = Client_List?[selectedDay.toUtc()] ?? [];
+      selectedList = client_List?[date] ?? [];
+      print(selectedList);
     });
   }
 
@@ -39,16 +40,37 @@ class _HomePageState extends State<HomePage> {
 
     print("initState()");
      homeVM.fetchAllData();
-    setState((){
-      selectedList = homeVM.getClientsList();
-
-    });
+      print(selectedDay);
+      selectedList = homeVM.listOfAllClients;
+      client_List = homeVM.listOfClients;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // selectedList = Provider.of<MyProvider>(context).listOfSelectedClients;
+  Widget homeCalender(){
+    return SizedBox(
+      height: 150,
+      child: TableCalendar(
+        shouldFillViewport: true,
+        calendarFormat: CalendarFormat.week,
+        firstDay: DateTime(DateTime
+            .now()
+            .year),
+        lastDay: DateTime(DateTime
+            .now()
+            .year + 25),
+        focusedDay: _focusedDay,
+        currentDay: selectedDay,
+        onDaySelected: (date, focusedDay) {
+
+          setState(() {
+            _handleData(DateTime(
+                date.year,date.month, date.day, 00, 0).toLocal());
+            selectedDay = date;
+            _focusedDay =
+                date; // update `_focusedDay` here as well
+          });
+        },
+      ),
+    );
   }
 
   Widget titleOfPage(){
@@ -100,28 +122,31 @@ class _HomePageState extends State<HomePage> {
 
                 Text(
                   "Case: ${client.caseName}",
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
                 Text(
                   "Age: ${client.age}",
-                  style:
-                      const TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
                 Text(
                   "Durration: ${client.Durration} min",
-                  style:
-                      const TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
                 ),
-                
-              
+
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active_outlined)),
-            //   ],
-            // )
+
+            Row(
+              children: [
+                // client.sessions.map((e) => e = DateTime(DateTime.now().year,))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active_outlined)),
+              ],
+            )
           ],
         ),
       ),
@@ -148,39 +173,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget homeCalender(){
-    return SizedBox(
-      height: 150,
-      child: TableCalendar(
-        shouldFillViewport: true,
-        calendarFormat: CalendarFormat.week,
-        firstDay: DateTime(DateTime
-            .now()
-            .year),
-        lastDay: DateTime(DateTime
-            .now()
-            .year + 25),
-        focusedDay: _focusedDay,
-        currentDay: selectedDay,
-        onDaySelected: (date, focusedDay) {
-          setState(() {
-            _handleData(selectedDay.toUtc());
-            selectedDay = date;
-            _focusedDay =
-                date; // update `_focusedDay` here as well
-          });
-        },
-      ),
-    );
-  }
+
 
 
 
   @override
   Widget build(BuildContext context) {
     return
-      // Consumer<MyProvider>(builder: (context, provider, child) {
-      //   return
+      Consumer<HomePageVM>(builder: (context, provider, child) {
+        return
           Column(children: [
             //Welcome
             titleOfPage(),
@@ -195,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   : emptyList()
             ),
           ]);
-   //   });
+     });
   }
 
 

@@ -19,8 +19,8 @@ class LoginViewModel {
 
 
   //Store the name of the therapist in the RealTimeDB
-
   final FirebaseDatabase _database = FirebaseDatabase.instance;
+
   //todo store the gmail too when it works
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/");
 
@@ -57,10 +57,7 @@ class LoginViewModel {
         print(error);
         erroeMsg = error.toString();
     });
-
-    print("toStored");
     storeData(email , password);
-    print("AfterStored");
 
   }
 
@@ -83,10 +80,10 @@ class LoginViewModel {
     await FirebaseAuth.instance.signOut();
   }
 
+  //todo: Store the email in the RealTimeDB
+
   Future<void> addToTherapist(String email) async{
     DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/");
-
-    //Store the email in the RealTimeDB
     await _databaseReference.push().set({
       "name" :  email
     });
@@ -101,9 +98,15 @@ class LoginViewModel {
     await prefs.setString("uniquekey", id);
   }
 
-  String getError() {
-    return  erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";
-  }
+  String getError() => erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";
+
+
+
+
+
+
+
+
 // Future<void> loginByGmail() async {
   //   print("Login By Gmail");
   //

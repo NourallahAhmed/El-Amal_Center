@@ -26,16 +26,7 @@ void main() async {
   final String? passwordSaved = prefs.getString('password');
   print(passwordSaved);
 
-  runApp(
-      /*ChangeNotifierProvider(
-          create: (context) => MyProvider.getInstance(),
-          child:
-          */
-
-          MyApp(email: emailSaved , pass: passwordSaved)
-      // )
-  );
-
+  runApp(MyApp(email: emailSaved, pass: passwordSaved));
 }
 
 class MyApp extends StatelessWidget {
@@ -49,6 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     print("emailSaved ${email}" );
+    print("todays date ${DateTime(2022,10,6).millisecondsSinceEpoch}" );
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,

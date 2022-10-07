@@ -18,63 +18,60 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
-  final _loginVM =  LoginViewModel();
+  final _loginVM = LoginViewModel();
+
   // final _homePageVM =  HomePageVM();
 
-
-
   @override
-  initState(){
-
-  }
+  initState() {}
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return /*Consumer<MyProvider>(builder: (context, provider, child) {
-      return*/
-        Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => HomePageVM(),
+        child: Scaffold(
           appBar: AppBar(title: const Text("El Amal Center")),
           drawer: Drawer(
               child: ListView(padding: EdgeInsets.zero, children: [
-                DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Image.asset('assets/images/facebook.png'),
-                ),
-                ListTile(
-                  title: const Text('Patients'),
-                  leading: const Icon(
-                    Icons.schedule,
-                    color: Colors.blueAccent,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Image.asset('assets/images/facebook.png'),
+            ),
+            ListTile(
+              title: const Text('Patients'),
+              leading: const Icon(
+                Icons.schedule,
+                color: Colors.blueAccent,
+              ),
+              onTap: () {
+                Navigator.pop(context);
 
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => MyHomePage(title: "Events")));
-                  },
-                ),
-                ListTile(
-                  title: const Text('Log Out'),
-                  leading: const Icon(
-                    Icons.logout,
-                    color: Colors.blueAccent,
-                  ),
-                  onTap: () {
-                    // Navigator.pop(context);
-                    _loginVM.logOut();
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
-                  },
-                ),
-              ])),
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => MyHomePage(title: "Events")));
+              },
+            ),
+            ListTile(
+              title: const Text('Log Out'),
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.blueAccent,
+              ),
+              onTap: () {
+                // Navigator.pop(context);
+                _loginVM.logOut();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+              },
+            ),
+          ])),
           body: Stack(
             children: [
               Positioned(
@@ -101,7 +98,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
             },
             child: const Icon(Icons.add),
           ),
-        );
-    // });
+        )
+    );
+
   }
 }

@@ -10,7 +10,7 @@ class Client {
   DateTime startDate;
   DateTime storedAt;
   String storedBy;
-  // List<DateTime> sessions;
+  List<DateTime> sessions;
   int Durration;
   int price;
   String gender;
@@ -24,12 +24,12 @@ class Client {
       required this.startDate,
       this.caseName = '',
       this.gender = "male",
-        // this.sessions = [],
+        required this.sessions,
       this.price = 0,
       this.Durration = 30});
 
   //serialization
-
+//todo to firebase
 Map<String, dynamic> toJson() {
   return {
     "id": id,
@@ -38,8 +38,8 @@ Map<String, dynamic> toJson() {
     "age": age,
     "caseName": caseName,
     "storedBy": storedBy,
-    "storedAt": storedAt,
-    // "sessions": sessions,
+    "storedAt": storedAt.millisecondsSinceEpoch,
+    "sessions": convertList(sessions),
     "startDate": startDate.millisecondsSinceEpoch,
     "price": price,
     "Durration": Durration ,
@@ -47,22 +47,45 @@ Map<String, dynamic> toJson() {
   };
 }
 
+//todo  convert list of sessions to map to firebase
+Map<int, int> convertList(List<DateTime> list) {
+    Map<int, int>  map = {};
+
+    list.forEach((element) {
+    var newMap =
+      {list.indexOf(element) :
+        element.millisecondsSinceEpoch
+      };
+
+    map.addEntries(newMap.entries);
+  });
+
+
+  return map;
+  }
+
 ///from snapshot
 
-
   factory Client.fromMap(Map<dynamic, dynamic> map) {
+
+  //todo: from firebase
+    final List<int> sessionsMap = map["sessions"].cast<int>() ;
+    final List<DateTime> sessionList  = [];
+    sessionsMap.forEach(( value) => sessionList.add(DateTime.fromMillisecondsSinceEpoch(value)));
+
+    print(map["therapist"]);
     return Client(0,
-        therapist: map["Therapist"],
+        therapist: map["therapist"],
         name: map["name"],
         gender: map['Gender'],
         storedAt: DateTime.fromMillisecondsSinceEpoch(map["storedAt"]) ,
         storedBy:  map["storedBy"],
-        startDate: DateTime.fromMillisecondsSinceEpoch(map["startDay"]),
-        // sessions:  map["SesionDays"] as Map,
+        startDate: DateTime.fromMillisecondsSinceEpoch(map["startDate"]),
+        sessions: sessionList,
         price:  map["price"],
         Durration:  map["Durration"],
-        caseName: map["Case"],
-        age: map["Age"],
+        caseName: map["caseName"],
+        age: map["age"],
     );
   }
 }
