@@ -36,30 +36,15 @@ class HomePageVM with ChangeNotifier {
 
     //outer Loop over the clients
     clients.forEach((client) {
-
       // inner loop over the sessions for each client
       client.sessions.forEach((session) {
         if (listOfClients.containsKey(DateTime(session.year,session.month, session.day, 00, 0).toLocal())) {
-          // print("Value");
-          //
-          // print(listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]);
-
-          //
-          // listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]?.map((e) {
-          //   print("name2");
-          //   print(e.name.toString());
-          //
-          //
-          // }
-          // );
-
-
-          if (listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]!.contains(client) == false )
-
+          if (listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]!.contains(client) == false ) {
             listOfClients.update(
                 DateTime(session.year, session.month,
                     session.day, 00, 0).toLocal(),
                     (value) => value + [client]);
+          }
 
         }
         else {

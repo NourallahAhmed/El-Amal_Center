@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
+import 'package:untitled/utils/Shared.dart';
 import '../../../../utils/constants.dart';
 import '../../../HomePage/View/homeScreen.dart';
 
@@ -44,6 +45,7 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
   var userNameController = TextEditingController();
   var passIcon = Icon(Icons.visibility_off);
   var obscure = true;
+  var isStored = false;
 
   var result = "";
   //todo input design
@@ -97,85 +99,74 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
 
   //todo button design
 
-  Widget loginButton(txtbutton title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
-      child: ElevatedButton(
-        onPressed: ()  {
-
-
-          //todo SignUP
-          if (title == txtbutton.SignUp) {
-
-            print("signup");
-            loginVM.createAccount(emailController.text , passwordController.text );
-
-
-            setState(() {
-
-              result = loginVM.getError();
-              print("result");
-            print(result);
-            });
-
-            if (  result.isEmpty  & loginVM.isStored == true){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePageScreen()));
-              emailController.clear();
-              userNameController.clear();
-              passwordController.clear();
-            }
-          }
-          else {
-
-
-            //MARK : already have an account
-
-            if(title == txtbutton.LogIn){
-
-
-              loginVM.login(
-                  emailController.text, passwordController.text);
-
-              setState(() {
-
-                result = loginVM.getError();
-
-              });
-
-
-              print("result");
-              print(result.isNotEmpty);
-            if(loginVM.isStored == true) {
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) => const HomePageScreen()));
+  Widget loginButton(txtbutton title ) {
+    return
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
+        child: ElevatedButton(
+          onPressed: () async {
+            //todo SignUP
+            if (title == txtbutton.SignUp) {
+              if (emailController.text.isNotEmpty  & passwordController.text.isNotEmpty){
+                var check = await loginVM.createAccount(emailController.text , passwordController.text );
+                if (check) {
+                  Navigator.pushReplacement(context,  MaterialPageRoute(
+                      builder: (context) => const HomePageScreen()));
+                  emailController.clear();
+                  userNameController.clear();
+                  passwordController.clear();
+                }
+              }
             }
 
-              emailController.clear();
-              userNameController.clear();
-              passwordController.clear();
-            }
-            else{
-              print("nothing");
-            }
-          }
+            //todo Login
+            else {
+              //MARK : already have an account
+              if(title == txtbutton.LogIn){
+                // not Empty
+                print("to Login");
+                if (emailController.text.isNotEmpty & passwordController.text.isNotEmpty) {
+                  //Send to firebase Auth
+                  var check = await loginVM.login(
+                      emailController.text, passwordController.text);
 
-        },
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: const StadiumBorder(),
-          primary: kSecondaryColor,
-          elevation: 8,
-          shadowColor: Colors.black87,
-        ),
-        child: Text(
-          "\t ${title.name} \t",
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+                  //todo check on the error and  stored data
+                  if (check){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePageScreen()));
+                  }
+                  emailController.clear();
+                  userNameController.clear();
+                  passwordController.clear();
+
+
+                }
+                // });
+
+              }
+              else{
+                print("nothing");
+              }
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: const StadiumBorder(),
+            primary: kSecondaryColor,
+            elevation: 8,
+            shadowColor: Colors.black87,
+          ),
+          child: Text(
+            "\t ${title.name} \t",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 
 
@@ -326,13 +317,12 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
 
   var isLogin = true;
   var isCreate = false;
-  var isStored = false;
 
 
   @override
   initState() {
 
-      isStored = loginVM.isStored;
+    isStored = Provider.of<LoginViewModel>(context,listen: false).IsStored();
 
 
 
@@ -340,65 +330,190 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
       inputField('Username', Icons.person_outline , userNameController , TextInputType.name),
       inputField('Email', Icons.mail_outline , emailController , TextInputType.emailAddress),
       inputField('Password', Icons.lock  , passwordController , TextInputType.visiblePassword),
+      // Consumer<LoginViewModel>(builder: (context, provider, child) {
+      //   return LogoButtons(loginVM: provider, emailController: emailController,
+      //       passwordController: passwordController, context: context,
+      //       userNameController: userNameController, title : txtbutton.SignUp.name);
+      // }),
       loginButton(txtbutton.SignUp),
       orDivider(),
       logos(),
       alreadyHaveAcc()
-
-
     ];
-
     loginContent = [
       inputField('Email', Icons.mail_outline  , emailController , TextInputType.emailAddress),
       inputField('Password', Icons.lock , passwordController , TextInputType.visiblePassword),
+          // Consumer<LoginViewModel>(builder: (context, provider, child) {
+          // return LogoButtons(loginVM: provider, emailController: emailController,
+          // passwordController: passwordController, context: context,
+          // userNameController: userNameController, title : txtbutton.LogIn.name);
+          // }),
       loginButton(txtbutton.LogIn),
+
       forgotPassword(),
       createAccount()
     ];
-
-
 
     super.initState();
   }
 
 
+  @override
+  Widget build(BuildContext context) {
+
+    print("from build ${isStored}");
+    return SingleChildScrollView(
+            child: Column(
+                children: [
+
+                  const SizedBox(
+                    height: 100,
+                  ),
+
+                  Text(
+                    isLogin
+                        ? 'Create\nAccount'
+                        : 'Welcome\nBack',
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 50,
+                  ),
+
+                  Column(
+                      children:
+                      isCreate ?
+                      loginContent : createAccountContent
+                  ),
+
+
+                  CustomWidget(result: result),
+
+                ]
+            ),
+          );
+
+
+
+  }
+}
+
+class LogoButtons extends StatelessWidget {
+  const LogoButtons({
+    Key? key,
+    required this.loginVM,
+    required this.emailController,
+    required this.passwordController,
+    required this.context,
+    required this.userNameController,
+    required this.title,
+  }) : super(key: key);
+
+  final LoginViewModel loginVM;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final BuildContext context;
+  final TextEditingController userNameController;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    return
-      Consumer<LoginViewModel>(builder: (context, provider, child) {
-        return SingleChildScrollView(
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
 
-                const SizedBox(
-                  height: 100,
-                ),
-                Text(
-                  isLogin
-                      ? 'Create\nAccount'
-                      : 'Welcome\nBack',
-                  style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Column(
-                    children:
-                    isCreate ?
-                    loginContent : createAccountContent
-                ),
-                Text(result),
-              ]
-          ),
-        );
-      });
+    print("in Loginbuttons Class");
+    print(loginVM.isStored);
+    return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
+    child: ElevatedButton(
+      onPressed: () async {
+        //todo SignUP
+        if (title == txtbutton.SignUp.name) {
+
+          print("signup");
+          loginVM.createAccount(emailController.text , passwordController.text );
+
+          if (emailController.text.isNotEmpty  & passwordController.text.isNotEmpty){
+              print(" in delayed ${loginVM.isStored}");
+              print(loginVM.isStored);
+
+              if (loginVM.isStored) {
+                print(SharedPref.email);
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (context) => const HomePageScreen()));
+                emailController.clear();
+                userNameController.clear();
+                passwordController.clear();
+              }
+
+          }
+        }
+
+        //todo Login
+        else {
+          //MARK : already have an account
+          if(title == txtbutton.LogIn.name){
+            // not Empty
+            print("to Login");
+            if (emailController.text.isNotEmpty & passwordController.text.isNotEmpty) {
+              //Send to firebase Auth
+              var check = await loginVM.login(
+                  emailController.text, passwordController.text);
 
 
+
+                //todo check on the error and  stored data
+                if (check){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePageScreen()));
+                }
+                emailController.clear();
+                userNameController.clear();
+                passwordController.clear();
+
+
+            }
+            // });
+
+          }
+          else{
+            print("nothing");
+          }
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: const StadiumBorder(),
+        primary: kSecondaryColor,
+        elevation: 8,
+        shadowColor: Colors.black87,
+      ),
+      child: Text(
+        "\t ${title} \t",
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+      );
+  }
+}
+
+class CustomWidget extends StatelessWidget {
+  const CustomWidget({
+    Key? key,
+    required this.result,
+  }) : super(key: key);
+
+  final String result;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(result);
   }
 }

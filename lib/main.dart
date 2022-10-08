@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Services/MyProvider.dart';
+import 'package:untitled/UI/AddingClient/ViewModel/AddingClientVM.dart';
+import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
+import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 import 'package:untitled/utils/Shared.dart';
 
 import 'UI/HomePage/View/Component/HomePage.dart';
@@ -28,7 +31,16 @@ void main() async {
   final String? passwordSaved = SharedPref.isExist? SharedPref.password : null;
 
 
-  runApp(MyApp(email: emailSaved, pass: passwordSaved));
+  runApp(
+      MultiProvider(
+          providers: [
+            ChangeNotifierProvider<LoginViewModel>(create: (_) => LoginViewModel()),
+            ChangeNotifierProvider<HomePageVM>(create: (_) => HomePageVM()),
+            ChangeNotifierProvider<AddingViewModel>(create: (_) => AddingViewModel()),
+          ],
+          child: MyApp(email: emailSaved, pass: passwordSaved))
+      );
+
 }
 
 class MyApp extends StatelessWidget {

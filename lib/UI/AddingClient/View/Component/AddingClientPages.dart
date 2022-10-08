@@ -267,29 +267,29 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                   )),
 
 
-
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed))
-                      return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-                    return null; // Use the component's default.
-                  },
-                ),
-              ), child: Icon(Icons.add),
-              onPressed: (){
-
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                onPrimary: Theme.of(context).colorScheme.onPrimary,
-                onSurface: Theme.of(context).colorScheme.primary,
-              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-              onPressed: (){},
-              child: const Text('Filled'),
-            ),
+            //
+            // ElevatedButton(
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            //           (Set<MaterialState> states) {
+            //         if (states.contains(MaterialState.pressed))
+            //           return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+            //         return null; // Use the component's default.
+            //       },
+            //     ),
+            //   ), child: Icon(Icons.add),
+            //   onPressed: (){
+            //
+            //   },
+            // ),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     onPrimary: Theme.of(context).colorScheme.onPrimary,
+            //     onSurface: Theme.of(context).colorScheme.primary,
+            //   ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+            //   onPressed: (){},
+            //   child: const Text('Filled'),
+            // ),
 
             ],
         ),

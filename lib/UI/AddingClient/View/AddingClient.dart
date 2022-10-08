@@ -26,16 +26,16 @@ class _AddingClientScreenState extends State<AddingClientScreen> {
         .of(context)
         .size;
 
-    return ChangeNotifierProvider(
+    return /*ChangeNotifierProvider(
         create: (context) => AddingViewModel(),
     child:
-
+*/
       Scaffold(
       appBar:  AppBar(
           title:  Text("El Amal Center"),
       ),
       body: Stack(
-        children: [
+        children: const [
           // Positioned(
           //   top: -390,
           //   left: 100,
@@ -48,10 +48,11 @@ class _AddingClientScreenState extends State<AddingClientScreen> {
           //   child: HelperFunctions.bottomWidget(screenSize.width),
           // ),
           // // CenterWidget(size: screenSize),
-          AddingClientPages(),
+           AddingClientPages(),
         ],
       )
-    ));
+    );
+    // );
 
   }
 }

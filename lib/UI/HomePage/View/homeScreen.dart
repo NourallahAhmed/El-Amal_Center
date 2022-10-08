@@ -29,9 +29,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return ChangeNotifierProvider(
+    return/* ChangeNotifierProvider(
         create: (context) => HomePageVM(),
-        child: Scaffold(
+        child: */Scaffold(
           appBar: AppBar(title: const Text("El Amal Center")),
           drawer: Drawer(
               child: ListView(padding: EdgeInsets.zero, children: [
@@ -98,7 +98,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             },
             child: const Icon(Icons.add),
           ),
-        )
+      //  )
     );
 
   }

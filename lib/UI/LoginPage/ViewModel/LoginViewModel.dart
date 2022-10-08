@@ -1,6 +1,8 @@
 
 
 
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ class LoginViewModel  with ChangeNotifier{
 
 
   var erroeMsg  = "" ;
-  var isStored  = false ;
+  var  isStored = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   // final GoogleSignIn _googleSignin = GoogleSignIn();
 
@@ -29,11 +31,11 @@ class LoginViewModel  with ChangeNotifier{
   final Firebase _firebase = Firebase();
   final Google _google = Google();
 
-  Future<void> createAccount(  String email ,   String password) async {
+  Future<bool> createAccount(  String email ,   String password) async {
 
     erroeMsg = "";
     print("Create Account");
-
+    bool returnedVal ;
     UserCredential userCredential = await _auth
         .createUserWithEmailAndPassword
         (email: email, password: password)
@@ -43,26 +45,27 @@ class LoginViewModel  with ChangeNotifier{
 
     if (erroeMsg.isEmpty){
       // Obtain shared preferences.
-      storeData(email , password);
-      addToTherapist(email);
+
+        addToTherapist(email);
     }
+    return await storeData(email , password);;
 
   }
 
-  Future<void> login( String email , String password) async {
+  Future<bool> login( String email , String password) async {
     print("Login");
-    var id = UniqueKey().hashCode.toString();
-    final prefs = await SharedPreferences.getInstance();
-    erroeMsg = "";
-
+    erroeMsg = "test";
+    notifyListeners();
     UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password)
         .catchError( ( error ) {
         print(error);
         erroeMsg = error.toString();});
-      storeData(email, password);
+    return await storeData(email, password);
 
   }
+
   IsStored() => isStored;
+
   Future<void> loginGmail () async {
     AuthCredential? authCredential = await _google.logIn();
     await _firebase.logIn(authCredential!);
@@ -88,8 +91,10 @@ class LoginViewModel  with ChangeNotifier{
     });
   }
 
-  Future<void> storeData(String email , String password) async {
+  Future<bool> storeData(String email , String password) async {
     print("StoreData");
+    print("from bedfore storing function is Stored = ${isStored}");
+
     var id = UniqueKey().hashCode.toString();
     // final prefs = await SharedPreferences.getInstance();
     await SharedPref.pref.setString("email", email);
@@ -97,6 +102,10 @@ class LoginViewModel  with ChangeNotifier{
     await  SharedPref.pref.setString("uniquekey", id);
     isStored = true;
     notifyListeners();
+    return isStored;
+
+    print("from Stored function is Stored = ${isStored}");
+
   }
 
   String getError() => erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";
