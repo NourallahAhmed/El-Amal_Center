@@ -7,14 +7,17 @@ class SharedPref {
   static late String email;
   static late String userName;
   static late String password;
-
+  static var isExist = false;
   static  Future<SharedPreferences> getShared () async{
 
     pref = await SharedPreferences.getInstance();
-    email = (await pref.getString("email"))!;
-    userName = email.substring(0,email.indexOf("@"));
-    password = (await pref.getString("password"))!;
+    if (pref.containsKey("email")){
+      isExist = true;
+      email = (await pref.getString("email"))!;
+      userName = email.substring(0,email.indexOf("@"));
+      password = (await pref.getString("password")) ?? "";
 
+    }
     return pref;
   }
 

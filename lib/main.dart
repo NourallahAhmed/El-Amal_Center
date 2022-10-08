@@ -23,9 +23,10 @@ void main() async {
 
   // Obtain shared preferences.
   final prefs = await SharedPref.getShared();
-  final String? emailSaved = SharedPref.email;
-  final String? passwordSaved = SharedPref.password;
-  print(passwordSaved);
+
+  final String? emailSaved =  SharedPref.isExist? SharedPref.email : null;
+  final String? passwordSaved = SharedPref.isExist? SharedPref.password : null;
+
 
   runApp(MyApp(email: emailSaved, pass: passwordSaved));
 }

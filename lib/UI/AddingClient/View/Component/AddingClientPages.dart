@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/utils/Shared.dart';
+import 'package:untitled/utils/extensions.dart';
+import 'package:weekday_selector/weekday_selector.dart';
 
 import '../../ViewModel/AddingClientVM.dart';
 import '../../../../utils/Constants.dart';
@@ -22,12 +24,11 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   late List<String> _listOftherapist ;
   String _clientCase = "case1";
   String _clientTherapist  = SharedPref.userName;
-  List<DateTime>_listOfTime = [];
+  List<DateTime> _listOfSessionsTime = [];
   final _clientNameController = TextEditingController();
   final _clientAgeController = TextEditingController();
   final _clientPriceController = TextEditingController();
   final _clientDurrationController = TextEditingController();
-  final _clientTotalSessionController = TextEditingController();
   final _clientPhoneController = TextEditingController();
   var list = <Widget>[];
   DateTime? selectedTime = DateTime.now();
@@ -68,12 +69,12 @@ class _AddingClientPagesState extends State<AddingClientPages> {
     return
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Material(
+        child:/* Material(
         elevation: 8,
         shadowColor: Colors.black87,
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
-        child: DropdownButton(
+        child:*/ DropdownButton(
             isExpanded:true,
             borderRadius: BorderRadius.circular(30),
             hint: const Text("Case"),
@@ -94,7 +95,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
             });
           }
         )
-    ),
+    // ),
       );
   }
 
@@ -104,21 +105,23 @@ class _AddingClientPagesState extends State<AddingClientPages> {
     return
       Padding(
         padding: const EdgeInsets.all(8.0),
-    child: Material(
-    elevation: 8,
-    shadowColor: Colors.black87,
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(30),
+
+    // child: Material(
+    //   elevation: 8,
+    //   shadowColor: Colors.black87,
+    //   color: Colors.white,
+    //   borderRadius: BorderRadius.circular(30),
         child: DropdownButton(
+            alignment : AlignmentDirectional.center,
             isExpanded:true,
-          borderRadius: BorderRadius.circular(20),
+             borderRadius: BorderRadius.circular(20),
             hint: const Text("Therapist"),
             value: _clientTherapist,
             items:
               items.map((items) {
                 return DropdownMenuItem(
                   value: items,
-                  child: Text(items),
+                  child: Text(items , style:  TextStyle(color: kPrimaryColor),),
                 );
               }).toList(),
 
@@ -128,31 +131,8 @@ class _AddingClientPagesState extends State<AddingClientPages> {
               });
           }
           ),
-      )
+      // )
       );
-  }
-
-  Widget sessionDays(){
-    return ListView.builder(
-      padding: const EdgeInsets.all(0.0),
-      itemBuilder: (BuildContext context, int index) {
-
-        return Row(
-          children: [
-              IconButton( onPressed: () {
-                DateTime? dateTime = showDateTimePicker() as DateTime?;
-                dateTime == null  ? print("null") : _listOfTime.add(dateTime);
-                print(_listOfTime);
-              }, icon: Icon( Icons.calendar_today_outlined)),
-
-            _listOfTime.isNotEmpty ?
-            Text("${_listOfTime[index].day}- ${_listOfTime[index].month} -${_listOfTime[index].year}    ${_listOfTime[index].hour}:${_listOfTime[index].minute}"):
-                Container(),
-          ],
-        );
-      },
-      itemCount: int.parse(_clientTotalSessionController.text.toString()),
-    );
   }
 
   Widget titleOfPage(){
@@ -186,14 +166,13 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   @override
   Widget build(BuildContext context) {
     print("from build");
-    print(_listOftherapist);
-    print(_clientTherapist);
+    List<bool> values = List.filled(7, false);
     return Consumer<AddingViewModel>(builder: (context, provider, child) {
       return SizedBox(
       height: double.infinity,
       child: SingleChildScrollView(
         child: Column(
-
+            crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             titleOfPage(),
             SizedBox(width: 30,),
@@ -211,31 +190,108 @@ class _AddingClientPagesState extends State<AddingClientPages> {
             //Duration
             inputFeild("30", Icons.timer, _clientDurrationController, TextInputType.number,"Durration"),
 
-            //NumberOfSession
-            inputFeild("3", Icons.timer, _clientTotalSessionController, TextInputType.number, "Number of sessions"),
+            const SizedBox(
+              height: 15,
+            ),
 
             //Sessions
-            _clientTotalSessionController.text.isEmpty ? Container()  : Container(
-                width: double.infinity,
-                height: 100,
-                child: sessionDays()),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Column(
-            //     children: _clientTotalSessionController.text.isEmpty ? [ Container() ] : sessionDays(),
-            //   ),
-            // ),
+            // case and therapist
+              Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "\t Client`s case:",
+                        style: TextStyle(color: kPrimaryColor, fontSize: 15),
+                      ),
+                      //Case of the Client
+                      caseDropDownList(items),
+                      const SizedBox(
+                        height: 15,
+                      ),
 
-            //Case of the Client
-            caseDropDownList(items),
-            //therapist
-            _listOftherapist.isNotEmpty ? therapistDropDownList( _listOftherapist) : Container(),
+                     const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 15),),
+                      WeekdaySelector(
+                        firstDayOfWeek: 7,
+                        // selectedHoverColor: Colors.red,
+                        selectedFillColor: Colors.indigo,
+                        // selectedFillColor: kPrimaryColor ,
+                        // selectedFocusColor: Colors.blue,
+                        fillColor : RBackgroundColor,
+                        selectedElevation: 15,
+                        elevation: 5,
+                        disabledElevation: 0,
+                        color :kPrimaryColor ,
+                        onChanged: (val) async {
+                          var time = await pickTime() as TimeOfDay;
+                          setState((){
+
+                            var now = DateTime.now();
+
+                            var firstOfMonth = DateTime(now.year, now.month, val , time.hour , time.minute);
+
+                            var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday - val)) % 7);; // with Time picked
+                            //todo check the firstday if it less than current do not add it
+                            if (firstDayPickedInMonth.day < DateTime.now().day){
+                              // do not add it
+                            }
+                            else{
+
+                              _listOfSessionsTime.add(firstDayPickedInMonth);
+                            }
+                            //todo handle schedule for 2 month = 8 week == 8 loops
+                            for (var week = 1 ; week <= 9 ; week ++){
+                              print("nextDay in ${week} ${firstDayPickedInMonth.addCalendarDays(week * 7)}");
+                              _listOfSessionsTime.add(firstDayPickedInMonth.addCalendarDays(week * 7));
+                            }
+
+                            print(_listOfSessionsTime);
+                          });
+                        },
+                        values: values,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    const  Text(
+                        "\t Client`s therapist:",
+                        style: TextStyle(color: kPrimaryColor, fontSize: 15),
+                      ),
+
+                      //therapist
+                      _listOftherapist.isNotEmpty
+                          ? therapistDropDownList(_listOftherapist)
+                          : Container(),
+                    ],
+                  )),
 
 
 
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed))
+                      return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                    return null; // Use the component's default.
+                  },
+                ),
+              ), child: Icon(Icons.add),
+              onPressed: (){
 
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: Theme.of(context).colorScheme.onPrimary,
+                onSurface: Theme.of(context).colorScheme.primary,
+              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+              onPressed: (){},
+              child: const Text('Filled'),
+            ),
 
-          ],
+            ],
         ),
       ),
     );
