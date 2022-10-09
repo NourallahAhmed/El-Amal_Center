@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/UI/AddingClient/View/Component/InputFeild.dart';
 import 'package:untitled/utils/Shared.dart';
 import 'package:untitled/utils/extensions.dart';
 import 'package:weekday_selector/weekday_selector.dart';
-
+import 'package:intl/intl.dart';
 import '../../ViewModel/AddingClientVM.dart';
+import '../../View/Component/TitlePage.dart';
 import '../../../../utils/Constants.dart';
 
 class AddingClientPages extends StatefulWidget {
@@ -17,14 +19,15 @@ class AddingClientPages extends StatefulWidget {
 class _AddingClientPagesState extends State<AddingClientPages> {
 
   var _addingVM = AddingViewModel();
-  var time = DateTime.now();
-  var items = ["case1" , "case2" , "case3"];
 
+  var items = ["case1" , "case2" , "case3"];
 
   late List<String> _listOftherapist ;
   String _clientCase = "case1";
   String _clientTherapist  = SharedPref.userName;
+  // late String _clientTherapist ;
   List<DateTime> _listOfSessionsTime = [];
+  List<DateTime> _listOfSelectedTime = [];
   final _clientNameController = TextEditingController();
   final _clientAgeController = TextEditingController();
   final _clientPriceController = TextEditingController();
@@ -35,46 +38,12 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
 
 
-  Widget inputFeild(String hint, IconData iconData , TextEditingController txtController , TextInputType keyType , String label){
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-          elevation: 8,
-          shadowColor: Colors.black87,
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
-          child: TextField(
-            keyboardType: keyType,
-            controller: txtController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              hintText: hint,
-              labelText: label,
-              prefixIcon: Icon(iconData),
-            ),
-
-          )
-
-      ),
-    );
-  }
-  
-  Widget caseDropDownList(List<dynamic> items ){
+  Widget caseDropDownList(List<dynamic> items){
 
     return
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child:/* Material(
-        elevation: 8,
-        shadowColor: Colors.black87,
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        child:*/ DropdownButton(
+        child: DropdownButton(
             isExpanded:true,
             borderRadius: BorderRadius.circular(30),
             hint: const Text("Case"),
@@ -105,12 +74,6 @@ class _AddingClientPagesState extends State<AddingClientPages> {
     return
       Padding(
         padding: const EdgeInsets.all(8.0),
-
-    // child: Material(
-    //   elevation: 8,
-    //   shadowColor: Colors.black87,
-    //   color: Colors.white,
-    //   borderRadius: BorderRadius.circular(30),
         child: DropdownButton(
             alignment : AlignmentDirectional.center,
             isExpanded:true,
@@ -135,37 +98,86 @@ class _AddingClientPagesState extends State<AddingClientPages> {
       );
   }
 
-  Widget titleOfPage(){
-    return  Container(
-      margin: const EdgeInsets.all(8.0),
-      child:  Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-           Text(
-            " New Patient ",
-            style:  TextStyle(
-                color: kPrimaryColor,
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(width: 10,),
-          Icon(Icons.person_add_alt_1_rounded, color: kPrimaryColor, size: 50,),
+  Widget _listOfSelectedTimeWidget() {
+    var List =  <Widget> [];
+    for(var i = 0 ; i < _listOfSelectedTime.length ; i++){
+     List.add( Padding(
+       padding: const EdgeInsets.all(8.0),
+       child: Row(
+         mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(19),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: GestureDetector(
+                  //editing selected time
+                    onTap: () async {
+                      var prevSelection = _listOfSelectedTime.elementAt(i);
 
-        ],
-      ),
+                      var time = await pickTime(prevSelection) as TimeOfDay;
+
+                      _listOfSelectedTime.removeAt(_listOfSelectedTime.indexOf(prevSelection));
+
+                      var firstOfMonth = DateTime(prevSelection.year, prevSelection.month, prevSelection.weekday , time.hour , time.minute);
+
+
+                      var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday -  prevSelection.weekday)) % 7);
+
+
+                      setState((){
+
+                        handleTimeSelection(firstDayPickedInMonth);
+
+                      });
+                    },
+                    child: Text(" ${DateFormat('EE HH:mm:aa').format(_listOfSelectedTime.elementAt(i)).toString()}"))
+            ),
+
+            IconButton(onPressed: (){
+
+              //deleting Selected time
+              setState((){
+
+               _listOfSelectedTime.removeAt(i);
+               print(_listOfSelectedTime);
+             });
+
+
+            }, icon: Icon(Icons.dangerous )),
+          ],
+        ),
+     ));
+    };
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List,
     );
   }
 
+
   @override
   initState(){
-      _addingVM.getAllTherapist();
-      _listOftherapist = _addingVM.therapists;
 
+
+
+      //ERROR the provider do not notify the view with the data
+
+    _addingVM.getAllTherapist();
+    _listOftherapist = _addingVM.therapists;
+      // _clientTherapist = _addingVM.therapists.first;
   }
+
   
   @override
   Widget build(BuildContext context) {
     print("from build");
+
+    print( _listOftherapist.isNotEmpty);
+    print( _listOftherapist);
     List<bool> values = List.filled(7, false);
     return Consumer<AddingViewModel>(builder: (context, provider, child) {
       return SizedBox(
@@ -174,21 +186,22 @@ class _AddingClientPagesState extends State<AddingClientPages> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            titleOfPage(),
+            TitlePage(title: " New Patient ", icon : Icons.person_add_alt_1_rounded ),
+
             SizedBox(width: 30,),
             //Name of the client
-            inputFeild("Yasser", Icons.person, _clientNameController, TextInputType.name , "Name"),
+            InputFeild(hint: "Yasser", iconData: Icons.person, txtController: _clientNameController, keyType: TextInputType.name, label: "Name"),
 
             //Age of the Client
-            inputFeild("12", Icons.person, _clientAgeController, TextInputType.number , "Age"),
+            InputFeild(hint: "12", iconData: Icons.person, txtController: _clientAgeController, keyType: TextInputType.number, label: "Age"),
 
             //phone Number
-            inputFeild("012222222222", Icons.phone_android, _clientPhoneController, TextInputType.phone, "Phone Number"),
+            InputFeild(hint: "012222222222", iconData: Icons.phone_android, txtController: _clientPhoneController, keyType: TextInputType.phone, label: "Phone Number"),
             //Price
-            inputFeild("120", Icons.money, _clientPriceController, TextInputType.number , "Price"),
+            InputFeild(hint: "120", iconData: Icons.money, txtController: _clientPriceController, keyType: TextInputType.number, label: "Price"),
 
             //Duration
-            inputFeild("30", Icons.timer, _clientDurrationController, TextInputType.number,"Durration"),
+            InputFeild(hint: "30", iconData: Icons.timer, txtController: _clientDurrationController, keyType: TextInputType.number, label: "Durration"),
 
             const SizedBox(
               height: 15,
@@ -199,6 +212,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
               Padding(
                   padding: EdgeInsets.all(8),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
@@ -207,60 +221,58 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                       ),
                       //Case of the Client
                       caseDropDownList(items),
-                      const SizedBox(
-                        height: 15,
-                      ),
 
-                     const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 15),),
+                      const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 15),),
+
+
                       WeekdaySelector(
                         firstDayOfWeek: 7,
-                        // selectedHoverColor: Colors.red,
-                        selectedFillColor: Colors.indigo,
-                        // selectedFillColor: kPrimaryColor ,
-                        // selectedFocusColor: Colors.blue,
-                        fillColor : RBackgroundColor,
-                        selectedElevation: 15,
-                        elevation: 5,
-                        disabledElevation: 0,
+                        selectedElevation: 30,
                         color :kPrimaryColor ,
                         onChanged: (val) async {
-                          var time = await pickTime() as TimeOfDay;
+
+                          var now = DateTime.now();
+                          var time = await pickTime(now) as TimeOfDay;
+                          print("onChanged");
                           setState((){
 
                             var now = DateTime.now();
 
                             var firstOfMonth = DateTime(now.year, now.month, val , time.hour , time.minute);
 
-                            var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday - val)) % 7);; // with Time picked
-                            //todo check the firstday if it less than current do not add it
-                            if (firstDayPickedInMonth.day < DateTime.now().day){
-                              // do not add it
-                            }
-                            else{
+                            var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday - val)) % 7);
 
-                              _listOfSessionsTime.add(firstDayPickedInMonth);
-                            }
-                            //todo handle schedule for 2 month = 8 week == 8 loops
-                            for (var week = 1 ; week <= 9 ; week ++){
-                              print("nextDay in ${week} ${firstDayPickedInMonth.addCalendarDays(week * 7)}");
-                              _listOfSessionsTime.add(firstDayPickedInMonth.addCalendarDays(week * 7));
-                            }
+                            handleTimeSelection(firstDayPickedInMonth);
+                            // extract to separate function
+                            // //todo handle schedule for 2 month = 8 week == 8 loops
+                            // for (var week = 1 ; week <= 9 ; week ++){
+                            //   print("nextDay in ${week} ${firstDayPickedInMonth.addCalendarDays(week * 7)}");
+                            //   _listOfSessionsTime.add(firstDayPickedInMonth.addCalendarDays(week * 7));
+                            // }
 
-                            print(_listOfSessionsTime);
+                            print(_listOfSelectedTime);
                           });
                         },
                         values: values,
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    const  Text(
+
+
+                    _listOfSelectedTime.isNotEmpty ?
+                      _listOfSelectedTimeWidget()
+
+                        : Container(),
+
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+
+                     const  Text(
                         "\t Client`s therapist:",
                         style: TextStyle(color: kPrimaryColor, fontSize: 15),
                       ),
 
-                      //therapist
-                      _listOftherapist.isNotEmpty
+                      //todo: therapist
+                   _listOftherapist.isNotEmpty
                           ? therapistDropDownList(_listOftherapist)
                           : Container(),
                     ],
@@ -299,12 +311,12 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   }
 
 
-   Future<TimeOfDay?> pickTime() => showTimePicker(context: context, initialTime: TimeOfDay(hour: time.hour, minute: time.minute));
-   Future<DateTime?> pickDate() => showDatePicker(context: context, initialDate: time, firstDate: DateTime.now(), lastDate: DateTime(DateTime.now().year + 25));
+   Future<TimeOfDay?> pickTime(DateTime now) => showTimePicker(context: context, initialTime: TimeOfDay(hour: now.hour, minute: now.minute));
+   Future<DateTime?> pickDate() => showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(DateTime.now().year + 25));
    Future<DateTime?> showDateTimePicker() async {
    DateTime? date = await pickDate();
    if (date != null ) {
-     TimeOfDay? time = await pickTime();
+     TimeOfDay? time = await pickTime(DateTime.now());
      if (time != null){
         final dateTime = DateTime(date.year,date.month,date.year,time.hour, time.minute);
         return dateTime;
@@ -312,4 +324,32 @@ class _AddingClientPagesState extends State<AddingClientPages> {
    }
  }
 
+  handleTimeSelection(DateTime firstDayPickedInMonth){
+
+    print(firstDayPickedInMonth);
+    //todo check the firstday if it less than current do not add it
+    if (firstDayPickedInMonth.day < DateTime.now().day){
+      var nextDayInMonth = firstDayPickedInMonth.addCalendarDays(1 * 7);
+      _listOfSelectedTime.add(firstDayPickedInMonth.addCalendarDays(1 * 7));
+      print("after adding ${_listOfSelectedTime}");
+      // do not add it
+      print("firstDayPickedInMonth.day = ${firstDayPickedInMonth.day}" );
+      print("DateTime.now().day = ${DateTime.now().day}" );
+      print("nextDayInMonth = ${nextDayInMonth}" );
+
+    }
+    else{
+
+      _listOfSelectedTime.add(firstDayPickedInMonth);
+      print("added");
+    }
+
+  }
+
+
 }
+
+
+
+
+

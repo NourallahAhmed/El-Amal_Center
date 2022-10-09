@@ -35,6 +35,7 @@ dependencies:
   awesome_dialog: ^3.0.1
   sqflite:
   provider:
+  flutter_launcher_icons:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -53,6 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -107,3 +109,8 @@ flutter:
     - assets/images/google.png
     - assets/images/man.png
     - assets/images/woman.png
+    - assets/images/hopecenter.jpg
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "asset/icons/hopecenter.jpg"
