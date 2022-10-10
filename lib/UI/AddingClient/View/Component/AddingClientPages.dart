@@ -24,13 +24,11 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
   var _addingVM = AddingViewModel();
 
-  var items = ["case1" , "case2" , "case3"];
+  var items = ["case1" , "case2" , "case3"]; //todo will be enum by the actual names
 
   late List<String> _listOftherapist ;
   String _clientCase = "case1";
-  String _clientTherapist  = SharedPref.userName;
-  // late String _clientTherapist ;
-  List<DateTime> _listOfSessionsTime = [];
+  String _clientTherapist  = SharedPref.email;
   List<DateTime> _listOfSelectedTime = [];
   final _clientNameController = TextEditingController();
   final _clientAgeController = TextEditingController();
@@ -39,8 +37,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   final _clientPhoneController = TextEditingController();
   var list = <Widget>[];
   DateTime? selectedTime = DateTime.now();
-
-
+  Gender? _clientGender;
 
   Widget caseDropDownList(List<dynamic> items){
 
@@ -58,7 +55,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                   value: items,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(items),
+                    child: Text(items , style: TextStyle( fontSize: 17),),
                   ),
                 );
               }).toList(),
@@ -88,7 +85,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
               items.map((items) {
                 return DropdownMenuItem(
                   value: items,
-                  child: Text(items , style:  TextStyle(color: kPrimaryColor),),
+                  child: Text(items , style:  TextStyle(color: kPrimaryColor  , fontSize: 17,),),
                 );
               }).toList(),
 
@@ -163,12 +160,45 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   }
 
 
+
+  Widget _GenderButtons(Gender gender){
+    return
+      Material(
+        elevation: 8,
+        shadowColor: Colors.black87,
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              border:  Border.all(color: RBackgroundColor)
+            ),
+            child:
+            GestureDetector(
+              child:  Row(
+                children: [
+
+
+                  Text("${gender.name}"),
+                   gender.name == 'Female' ?  Icon(Icons.female) :    Icon(Icons.male),
+
+                ],
+              ),
+                onTap: (){
+                  _clientGender = gender;
+                        print(_clientGender);
+                },
+            )
+
+          ),
+        );
+  }
+
   @override
   initState(){
-
-
-
-      //ERROR the provider do not notify the view with the data
 
     _addingVM.getAllTherapist();
     _listOftherapist = _addingVM.therapists;
@@ -199,13 +229,31 @@ class _AddingClientPagesState extends State<AddingClientPages> {
             //Age of the Client
             InputFeild(hint: "12", iconData: Icons.person, txtController: _clientAgeController, keyType: TextInputType.number, label: "Age"),
 
+            SizedBox(width: 30, height: 20,),
+
+
+            //todo Gender session
+          const  Text("\t \tGender: \t" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+
+            SizedBox(width: 30, height: 10,),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+
+              _GenderButtons(_clientGender = Gender.Female),
+              _GenderButtons(_clientGender = Gender.Male),
+            ],
+          ),
+            SizedBox(width: 30, height: 20,),
+
             //phone Number
             InputFeild(hint: "012222222222", iconData: Icons.phone_android, txtController: _clientPhoneController, keyType: TextInputType.phone, label: "Phone Number"),
             //Price
             InputFeild(hint: "120", iconData: Icons.money, txtController: _clientPriceController, keyType: TextInputType.number, label: "Price"),
 
             //Duration
-            InputFeild(hint: "30", iconData: Icons.timer, txtController: _clientDurrationController, keyType: TextInputType.number, label: "Durration"),
+            InputFeild(hint: "30", iconData: Icons.timer, txtController: _clientDurrationController, keyType: TextInputType.number, label: "Durration in MIN"),
 
             const SizedBox(
               height: 15,
@@ -221,12 +269,12 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                     children: [
                       const Text(
                         "\t Client`s case:",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 15),
+                        style: TextStyle(color: kPrimaryColor, fontSize: 17),
                       ),
                       //Case of the Client
                       caseDropDownList(items),
 
-                      const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 15),),
+                      const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
 
 
                       WeekdaySelector(
@@ -261,7 +309,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
                       const  Text(
                         "\t Client`s therapist:",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 15),
+                        style: TextStyle(color: kPrimaryColor, fontSize: 17),
                       ),
 
                       //todo: therapist
@@ -285,14 +333,15 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 9),
                   shape: const StadiumBorder(),
-                  primary: kPrimaryColor,
-                  elevation: 8,
+                  primary: Colors.white,
+                  elevation: 18,
                   shadowColor: Colors.black87,
                   // maximumSize: Size.fromWidth(500)
                 ),
                 child: const Text(
                   "\t Add Patient \t",
                   style:  TextStyle(
+                    color: kPrimaryColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

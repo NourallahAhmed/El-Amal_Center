@@ -18,7 +18,7 @@ class TitlePage extends StatelessWidget {
         children:  [
           Text(
             title,
-            style:  TextStyle(
+            style:  const TextStyle(
                 color: kPrimaryColor,
                 fontSize: 25,
                 fontWeight: FontWeight.bold),

@@ -28,7 +28,8 @@ class AddingViewModel  with ChangeNotifier{
       Map therapist = snapshot.value as Map;
       for (var el in therapist.values) {
         var name = el['name'].toString();
-        therapists.add(name.substring(0, name.lastIndexOf("@")));
+        therapists.add(name);
+        // therapists.add(name.substring(0, name.lastIndexOf("@")));
       }
 
     }

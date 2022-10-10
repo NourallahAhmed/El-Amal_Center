@@ -23,7 +23,12 @@ class HomePageVM with ChangeNotifier {
 
     map.forEach((key, value) {
       final client = Patient.fromMap(value);
-      if (client.therapist == email)  listOfAllClients.add(client);
+      print(client.name);
+      if (client.therapist == email){
+
+        print("therapist Email ${email}");
+        listOfAllClients.add(client);
+      }
     });
     buildTheList(listOfAllClients);
     // notifyListeners();
