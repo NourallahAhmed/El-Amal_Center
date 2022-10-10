@@ -22,9 +22,9 @@ class _HomePageState extends State<HomePage> {
 
   var homeVM = HomePageVM();
 
-  late List<Client> selectedList;
+  late List<Patient> selectedList;
 
-  Map<DateTime, List<Client>>? client_List;
+  Map<DateTime, List<Patient>>? client_List;
 
   //todo handle Selection
   void _handleData(date) {
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget clientRow(Client client) {
+  Widget clientRow(Patient client) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
       padding: const EdgeInsets.all(0.0),
       itemBuilder: (BuildContext context, int index) {
-        final Client client = selectedList[index];
+        final Patient client = selectedList[index];
 
         return clientRow(client);
       },

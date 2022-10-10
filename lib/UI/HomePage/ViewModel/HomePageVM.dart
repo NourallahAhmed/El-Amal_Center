@@ -8,9 +8,9 @@ import '../../../utils/Shared.dart';
 
 class HomePageVM with ChangeNotifier {
   //todo fetch the data related to the therpist by email
-  final List<Client> listOfAllClients = [];
-  final List<Client> _listOfTodaysClients = [];
-  final Map<DateTime,List<Client>> listOfClients = {};
+  final List<Patient> listOfAllClients = [];
+  final List<Patient> _listOfTodaysClients = [];
+  final Map<DateTime,List<Patient>> listOfClients = {};
 
   Future<void> fetchAllData() async {
     print("Fetch All Data");
@@ -22,7 +22,7 @@ class HomePageVM with ChangeNotifier {
     final map = snapshot.value as Map<dynamic, dynamic>;
 
     map.forEach((key, value) {
-      final client = Client.fromMap(value);
+      final client = Patient.fromMap(value);
       if (client.therapist == email)  listOfAllClients.add(client);
     });
     buildTheList(listOfAllClients);
@@ -30,7 +30,7 @@ class HomePageVM with ChangeNotifier {
   }
 
 
-  void buildTheList( List<Client> clients){
+  void buildTheList( List<Patient> clients){
 
     print("buildList");
 
@@ -48,7 +48,7 @@ class HomePageVM with ChangeNotifier {
 
         }
         else {
-            Map<DateTime, List<Client>> instance = {
+            Map<DateTime, List<Patient>> instance = {
               DateTime(session.year,session.month,
                   session.day , 00, 0).toLocal(): [
                 client,

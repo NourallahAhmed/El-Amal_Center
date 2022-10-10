@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/UI/AddingClient/View/Component/InputFeild.dart';
+import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/utils/Shared.dart';
 import 'package:untitled/utils/extensions.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 import 'package:intl/intl.dart';
+import '../../../../Model/Client.dart';
+import '../../../HomePage/View/homeScreen.dart';
 import '../../ViewModel/AddingClientVM.dart';
 import '../../View/Component/TitlePage.dart';
 import '../../../../utils/Constants.dart';
@@ -186,9 +190,9 @@ class _AddingClientPagesState extends State<AddingClientPages> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TitlePage(title: " New Patient ", icon : Icons.person_add_alt_1_rounded ),
+            TitlePage(title: " New Patient ", icon : Icons.person_add_alt ),
 
-            SizedBox(width: 30,),
+            SizedBox(width: 30, height: 40,),
             //Name of the client
             InputFeild(hint: "Yasser", iconData: Icons.person, txtController: _clientNameController, keyType: TextInputType.name, label: "Name"),
 
@@ -233,7 +237,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
                           var now = DateTime.now();
                           var time = await pickTime(now) as TimeOfDay;
-                          print("onChanged");
+
                           setState((){
 
                             var now = DateTime.now();
@@ -243,12 +247,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                             var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday - val)) % 7);
 
                             handleTimeSelection(firstDayPickedInMonth);
-                            // extract to separate function
-                            // //todo handle schedule for 2 month = 8 week == 8 loops
-                            // for (var week = 1 ; week <= 9 ; week ++){
-                            //   print("nextDay in ${week} ${firstDayPickedInMonth.addCalendarDays(week * 7)}");
-                            //   _listOfSessionsTime.add(firstDayPickedInMonth.addCalendarDays(week * 7));
-                            // }
+
 
                             print(_listOfSelectedTime);
                           });
@@ -256,53 +255,81 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                         values: values,
                       ),
 
-
                     _listOfSelectedTime.isNotEmpty ?
-                      _listOfSelectedTimeWidget()
+                      _listOfSelectedTimeWidget() : Container(),
 
-                        : Container(),
 
-                      // const SizedBox(
-                      //   height: 15,
-                      // ),
-
-                     const  Text(
+                      const  Text(
                         "\t Client`s therapist:",
                         style: TextStyle(color: kPrimaryColor, fontSize: 15),
                       ),
 
                       //todo: therapist
-                   _listOftherapist.isNotEmpty
+                       _listOftherapist.isNotEmpty
                           ? therapistDropDownList(_listOftherapist)
                           : Container(),
                     ],
                   )),
 
+            SizedBox(
+              height: 50,
+            ),
 
-            //
-            // ElevatedButton(
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-            //           (Set<MaterialState> states) {
-            //         if (states.contains(MaterialState.pressed))
-            //           return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-            //         return null; // Use the component's default.
-            //       },
-            //     ),
-            //   ), child: Icon(Icons.add),
-            //   onPressed: (){
-            //
-            //   },
-            // ),
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     onPrimary: Theme.of(context).colorScheme.onPrimary,
-            //     onSurface: Theme.of(context).colorScheme.primary,
-            //   ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-            //   onPressed: (){},
-            //   child: const Text('Filled'),
-            // ),
+            ///AddingButton
 
+
+
+            Center(
+              child: ElevatedButton(
+
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 9),
+                  shape: const StadiumBorder(),
+                  primary: kPrimaryColor,
+                  elevation: 8,
+                  shadowColor: Colors.black87,
+                  // maximumSize: Size.fromWidth(500)
+                ),
+                child: const Text(
+                  "\t Add Patient \t",
+                  style:  TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: (){
+
+                   print("from adding page the selected time list == ${_listOfSelectedTime}");
+
+
+                    var sessionList = prepareSessionList(_listOfSelectedTime);
+
+                    print("from adding page the session list == ${sessionList}");
+                    var client =
+                    Patient(0,
+                      name : _clientNameController.text,
+                      age : int.parse(_clientAgeController.text),
+                      therapist: _clientTherapist,
+                      caseName: _clientCase,
+                      startDate: DateTime.now(),
+                      storedAt: DateTime.now(),
+                      storedBy: SharedPref.email,
+                      sessions : sessionList,
+                        Durration : int.parse(_clientDurrationController.text),
+                      price: int.parse(_clientPriceController.text),
+                      phone: int.parse(_clientPhoneController.text),
+                      gender: "male"
+                    );
+
+                    _addingVM.addClient(client);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePageScreen()));
+
+                },
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             ],
         ),
       ),
@@ -341,11 +368,43 @@ class _AddingClientPagesState extends State<AddingClientPages> {
     else{
 
       _listOfSelectedTime.add(firstDayPickedInMonth);
-      print("added");
     }
 
   }
 
+
+  List<DateTime> prepareSessionList(List<DateTime> selectedTimes){
+
+     print("from prepareSessionList the upcomming list == ${selectedTimes}");
+
+     List<DateTime>  sessionList = [];
+    //todo handle schedule for 2 month = 8 week == 8 loops
+
+     selectedTimes.forEach((e){
+       print("inside the map ${e}");
+
+      for (var week = 1 ; week <= 9 ; week ++){
+        print("inside the for loop  ${e}");
+        sessionList.add(e.addCalendarDays(week * 7));
+        print("after adding ");
+        print("the list = ${sessionList}");
+
+      }
+
+      // for (var week = 1 ; week <= 9 ; week ++){
+      //
+      //   _listOfSessionsTime.add(e.addCalendarDays(week * 7));
+      // }
+
+    });
+
+
+     print("from prepareSessionList the returned list sessionList == ${sessionList}");
+     // print("from prepareSessionList the returned list _listOfSessionsTime == ${_listOfSessionsTime}");
+
+     return sessionList;
+
+  }
 
 }
 

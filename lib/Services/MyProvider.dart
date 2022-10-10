@@ -10,9 +10,9 @@ class MyProvider with ChangeNotifier {
 
   static MyProvider getInstance() => _instance;
 
-   late List<Client> listOfSelectedClients;
+   late List<Patient> listOfSelectedClients;
 
-   setList(List<Client> clients) {
+   setList(List<Patient> clients) {
       listOfSelectedClients = clients;
       notifyListeners();
   }

@@ -42,12 +42,12 @@ class AddingViewModel  with ChangeNotifier{
 
   List<String> getListOfTherapist() => therapists;
 
-  Future<void> addClient(Client client) async{
+  Future<void> addClient(Patient Patient) async{
     DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Client/");
 
     //Store the email in the RealTimeDB
     await _databaseReference.push().set(
-        client.toJson()
+        Patient.toJson()
     );
     print("addClient");
   }
