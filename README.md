@@ -30,4 +30,7 @@ It's Flutter application where the center can add patients and schedule sessions
 
 <img src="https://user-images.githubusercontent.com/87453033/194708035-80eea276-e7cd-41c3-aed8-90262779114b.png" width="243" height="528">              
 
+
 <img src="https://user-images.githubusercontent.com/87453033/194708095-f9efae5e-abfd-460c-aa91-11dc169c3e5f.png" width="243" height="528">           
+
+<img src="https://user-images.githubusercontent.com/87453033/194784072-c0b65f37-40d2-4de2-b7e4-adcdc9b50b38.jpg" width="243" height="528">           
