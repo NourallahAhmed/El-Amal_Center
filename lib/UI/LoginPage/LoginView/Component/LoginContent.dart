@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 import 'package:untitled/utils/Shared.dart';
+import '../../../../Services/PushNotifictionServices.dart';
 import '../../../../utils/constants.dart';
 import '../../../HomePage/View/homeScreen.dart';
 
@@ -420,6 +422,10 @@ class LogoButtons extends StatelessWidget {
   final TextEditingController userNameController;
   final String title;
 
+  initState()
+  {
+    PNServices.initInfo();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -441,6 +447,9 @@ class LogoButtons extends StatelessWidget {
 
               if (loginVM.isStored) {
                 print(SharedPref.email);
+
+
+
                 Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (context) => const HomePageScreen()));
                 emailController.clear();
@@ -466,10 +475,14 @@ class LogoButtons extends StatelessWidget {
 
                 //todo check on the error and  stored data
                 if (check){
+
+
+
+                  //todo we need token and  title and  body for sending notification
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePageScreen()));
+                          builder: (context) => HomePageScreen()));
                 }
                 emailController.clear();
                 userNameController.clear();

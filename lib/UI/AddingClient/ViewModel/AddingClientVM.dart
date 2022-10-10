@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Model/Client.dart';
+import '../../../Services/PushNotifictionServices.dart';
 import '../../../utils/Shared.dart';
 
 class AddingViewModel  with ChangeNotifier{
@@ -43,16 +45,41 @@ class AddingViewModel  with ChangeNotifier{
 
   List<String> getListOfTherapist() => therapists;
 
-  Future<void> addClient(Patient Patient) async{
+  Future<void> addClient(Patient patient) async{
     DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Client/");
 
     //Store the email in the RealTimeDB
     await _databaseReference.push().set(
-        Patient.toJson()
+        patient.toJson()
     );
+    sendNotifiction(patient);
+
+
+
+
+
     print("addClient");
   }
 
+
+  sendNotifiction(Patient p) async {
+    DocumentSnapshot snap =
+        await FirebaseFirestore.instance.collection("Tokens")
+        .doc(p.therapist)
+        .get();
+
+
+    String token = snap['token'];
+
+
+    print('token from login = ${token}');
+
+    PNServices.sendPushMessage(token, """
+    Check the new session for ${
+    p.name
+    }
+    """, "Al Amal Center");
+  }
   getUserName() =>  SharedPref.userName;
 
 }

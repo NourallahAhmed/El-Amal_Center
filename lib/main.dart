@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Services/MyProvider.dart';
+import 'package:untitled/Services/PushNotifictionServices.dart';
 import 'package:untitled/UI/AddingClient/ViewModel/AddingClientVM.dart';
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
@@ -13,22 +15,30 @@ import 'UI/HomePage/View/homeScreen.dart';
 import 'UI/LoginPage/LoginView/LoginScreen.dart';
 import 'utils/Constants.dart';
 
+//receiving notifications in background from firebase
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)  async {
+  print("handling a background message ${message.messageId}");
+}
+
 void main() async {
   /// for async await
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
 
+  //for push notification
 
-  // var _ref = FirebaseDataBase();
-
-
-
+  //todo if there is any background messages will be recived because of this line
+  await FirebaseMessaging.instance.getInitialMessage();
   // Obtain shared preferences.
   final prefs = await SharedPref.getShared();
 
   final String? emailSaved =  SharedPref.isExist? SharedPref.email : null;
   final String? passwordSaved = SharedPref.isExist? SharedPref.password : null;
+
+  //for background
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
 
 
   runApp(

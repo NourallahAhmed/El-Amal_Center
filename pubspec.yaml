@@ -51,6 +51,8 @@ dependencies:
   firebase_database: ^9.1.6
   http:
   weekday_selector: ^1.1.0
+  firebase_messaging: ^13.1.0
+  cloud_firestore:
 dev_dependencies:
   flutter_test:
     sdk: flutter

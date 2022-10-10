@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
+import 'package:untitled/utils/Shared.dart';
 import '../../../../Model/Client.dart';
+import '../../../../Services/PushNotifictionServices.dart';
 import '../../../../utils/Constants.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +40,10 @@ class _HomePageState extends State<HomePage> {
 @override
   initState(){
 
-
+    //todo be in initState in home page
+    PNServices.requestPermission();
+    PNServices.getToken(SharedPref.email);
+    PNServices.initInfo();
     print("initState()");
       homeVM.fetchAllData();
       selectedList = homeVM.listOfAllClients;

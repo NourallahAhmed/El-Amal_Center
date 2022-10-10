@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Model/Client.dart';
 
+import '../../../Services/PushNotifictionServices.dart';
 import '../../../utils/Shared.dart';
 
 class HomePageVM with ChangeNotifier {
@@ -31,6 +33,14 @@ class HomePageVM with ChangeNotifier {
       }
     });
     buildTheList(listOfAllClients);
+
+
+
+
+
+
+
+
     // notifyListeners();
   }
 
