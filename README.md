@@ -10,12 +10,12 @@ It's Flutter application where the center can add patients and schedule sessions
   - Home page
   - Adding Patient
 
-# Tootls
+# Tools
   - MVVM Desgin Pattern
   - Provider
   - FireBase Auth
   - FireBase RealTime DataBase
-  - FireBase DataBase
+  - Cloud Firestore DataBase
   - FireBase Cloud Messaging
   - Table Calender Package
   - Weekly Selector Package
