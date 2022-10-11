@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -10,7 +13,7 @@ class Patient {
   DateTime startDate;
   DateTime storedAt;
   String storedBy;
-  List<DateTime> sessions;
+  Map<String,List<DateTime>> sessions;
   int Durration;
   int price;
   int phone;
@@ -51,37 +54,69 @@ Map<String, dynamic> toJson() {
 }
 
 //todo  convert list of sessions to map to firebase
-Map<int, int> convertList(List<DateTime> list) {
+Map<String, List<int>> convertList(Map<String, List<DateTime>> upcommingMap) {
 
-  print("form Model convertSessionList => coming list  ${list}");
-    Map<int, int>  map = {};
+  print("form Model convertSessionList => coming list  ${upcommingMap}");
+    Map<String, List<int>>  map = {};
 
-    list.forEach((element) {
+    List<int> datetimeToInt = [];
+    var key = "";
 
-      print("form Model convertSessionList => inside foreach ${element}");
+    print(upcommingMap.length);
+    //loop over list of entry
+    for ( var i = 0 ; i <= upcommingMap.length -1  ; i ++) {
+      var key = upcommingMap.keys.elementAt(i);
 
-      var newMap =
-      {list.indexOf(element) :
-        element.millisecondsSinceEpoch
-      };
+      var listOfTime = upcommingMap[key];
 
-    map.addEntries(newMap.entries);
-  });
+      //loop over list of datetime
+      for (var j = 0 ; j <= listOfTime!.length -1 ; j++){
+        datetimeToInt.add(listOfTime[j].millisecondsSinceEpoch);
+      }
+      // print("befor add to map the list = ${datetimeToInt} , key = ${key}");
+      map.addAll({ key : datetimeToInt});
+    }
 
   print("form Model convertSessionList ${map}");
   return map;
   }
 
-///from snapshot
 
+
+///from snapshot
   factory Patient.fromMap(Map<dynamic, dynamic> map) {
 
-  //todo: from firebase
-    final List<int> sessionsMap = map["sessions"].cast<int>() ;
-    final List<DateTime> sessionList  = [];
-    sessionsMap.forEach(( value) => sessionList.add(DateTime.fromMillisecondsSinceEpoch(value)));
+    //todo: from firebase
 
-    print(map["therapist"]);
+    final sessionsMap = map["sessions"] ;
+
+    // final sessionsMap = new Map<String, dynamic>.from(map['sessions']);
+
+    Map <String,List<DateTime>> sessionMapDT = {};
+
+    print("toMap ${map.runtimeType}");
+    print("toMap ${sessionMapDT.runtimeType}");
+
+    List<DateTime> intToDateTime = [];
+
+    var key = "";
+
+
+    //loop over list of entry
+    for ( var i = 0 ; i <= sessionsMap.length -1  ; i ++) {
+      var key = sessionsMap.keys.elementAt(i);
+      var listOfInt = sessionsMap[key];
+      //loop over list of datetime
+      for (var j = 0 ; j <= listOfInt!.length -1 ; j++){
+        intToDateTime.add( DateTime.fromMillisecondsSinceEpoch(listOfInt[j]));
+      }
+        sessionMapDT.addAll({ key : intToDateTime});
+
+    }
+
+
+    print("toMap ${sessionMapDT["case3"].runtimeType}");
+
     return Patient(0,
         therapist: map["therapist"],
         name: map["name"],
@@ -89,7 +124,7 @@ Map<int, int> convertList(List<DateTime> list) {
         storedAt: DateTime.fromMillisecondsSinceEpoch(map["storedAt"]) ,
         storedBy:  map["storedBy"],
         startDate: DateTime.fromMillisecondsSinceEpoch(map["startDate"]),
-        sessions: sessionList,
+        sessions: sessionMapDT as Map<String, List<DateTime>>,
         price:  map["price"],
         Durration:  map["Durration"],
         caseName: map["caseName"],

@@ -22,7 +22,7 @@ class HomePageVM with ChangeNotifier {
     final snapshot = await FirebaseDatabase.instance.ref('Client/').get();
 
     final map = snapshot.value as Map<dynamic, dynamic>;
-
+    print("snapShot = ${map}");
     map.forEach((key, value) {
       final client = Patient.fromMap(value);
       print(client.name);
@@ -51,18 +51,24 @@ class HomePageVM with ChangeNotifier {
 
     //outer Loop over the clients
     clients.forEach((client) {
-      // inner loop over the sessions for each client
-      client.sessions.forEach((session) {
-        if (listOfClients.containsKey(DateTime(session.year,session.month, session.day, 00, 0).toLocal())) {
-          if (listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]!.contains(client) == false ) {
-            listOfClients.update(
-                DateTime(session.year, session.month,
-                    session.day, 00, 0).toLocal(),
-                    (value) => value + [client]);
-          }
 
-        }
-        else {
+
+
+      client.sessions.forEach((key, listOfSession) {
+
+        print("forEach in home page vm through the map string and List <DT>");
+        // inner loop over the sessions for each case
+        listOfSession.forEach((session) {
+          if (listOfClients.containsKey(DateTime(session.year,session.month, session.day, 00, 0).toLocal())) {
+            if (listOfClients[DateTime(session.year, session.month, session.day, 00, 0).toLocal()]!.contains(client) == false ) {
+              listOfClients.update(
+                  DateTime(session.year, session.month,
+                      session.day, 00, 0).toLocal(),
+                      (value) => value + [client]);
+            }
+
+          }
+          else {
             Map<DateTime, List<Patient>> instance = {
               DateTime(session.year,session.month,
                   session.day , 00, 0).toLocal(): [
@@ -71,7 +77,10 @@ class HomePageVM with ChangeNotifier {
             };
             listOfClients.addAll(instance);
           }
+        });
       });
+
+
     });
     notifyListeners();
     print(listOfClients);

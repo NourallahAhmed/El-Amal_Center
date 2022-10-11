@@ -25,7 +25,14 @@ class InputFeild extends StatelessWidget {
           shadowColor: Colors.black87,
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(30),
-          child: TextField(
+          child:  TextFormField(
+            // The validator receives the text that the user has entered.
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please Fill this Feild';
+              }
+              return null;
+            },
             keyboardType: keyType,
             controller: txtController,
             decoration: InputDecoration(

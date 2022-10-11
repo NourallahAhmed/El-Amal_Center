@@ -36,8 +36,11 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   final _clientDurrationController = TextEditingController();
   final _clientPhoneController = TextEditingController();
   var list = <Widget>[];
+  var  _IsEmpty = false;
   DateTime? selectedTime = DateTime.now();
   Gender? _clientGender;
+
+  final _formKey = GlobalKey<FormState>();
 
   Widget caseDropDownList(List<dynamic> items){
 
@@ -217,169 +220,185 @@ class _AddingClientPagesState extends State<AddingClientPages> {
       return SizedBox(
       height: double.infinity,
       child: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TitlePage(title: " New Patient ", icon : Icons.person_add_alt ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitlePage(title: " New Patient ", icon : Icons.person_add_alt ),
 
-            SizedBox(width: 30, height: 40,),
-            //Name of the client
-            InputFeild(hint: "Yasser", iconData: Icons.person, txtController: _clientNameController, keyType: TextInputType.name, label: "Name"),
+              SizedBox(width: 30, height: 40,),
+              //Name of the client
+              InputFeild(hint: "Yasser", iconData: Icons.person, txtController: _clientNameController, keyType: TextInputType.name, label: "Name"),
 
-            //Age of the Client
-            InputFeild(hint: "12", iconData: Icons.person, txtController: _clientAgeController, keyType: TextInputType.number, label: "Age"),
+              //Age of the Client
+              InputFeild(hint: "12", iconData: Icons.person, txtController: _clientAgeController, keyType: TextInputType.number, label: "Age"),
 
-            SizedBox(width: 30, height: 20,),
+              SizedBox(width: 30, height: 20,),
 
 
-            //todo Gender session
-          const  Text("\t \tGender: \t" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+              //todo Gender session
+            const  Text("\t \tGender: \t" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
 
-            SizedBox(width: 30, height: 10,),
+              SizedBox(width: 30, height: 10,),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
 
-              _GenderButtons(_clientGender = Gender.Female),
-              _GenderButtons(_clientGender = Gender.Male),
-            ],
-          ),
-            SizedBox(width: 30, height: 20,),
-
-            //phone Number
-            InputFeild(hint: "012222222222", iconData: Icons.phone_android, txtController: _clientPhoneController, keyType: TextInputType.phone, label: "Phone Number"),
-            //Price
-            InputFeild(hint: "120", iconData: Icons.money, txtController: _clientPriceController, keyType: TextInputType.number, label: "Price"),
-
-            //Duration
-            InputFeild(hint: "30", iconData: Icons.timer, txtController: _clientDurrationController, keyType: TextInputType.number, label: "Durration in MIN"),
-
-            const SizedBox(
-              height: 15,
+                _GenderButtons(_clientGender = Gender.Female),
+                _GenderButtons(_clientGender = Gender.Male),
+              ],
             ),
+              SizedBox(width: 30, height: 20,),
 
-            //Sessions
-            // case and therapist
-              Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "\t Client`s case:",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 17),
-                      ),
-                      //Case of the Client
-                      caseDropDownList(items),
+              //phone Number
+              InputFeild(hint: "012222222222", iconData: Icons.phone_android, txtController: _clientPhoneController, keyType: TextInputType.phone, label: "Phone Number"),
+              //Price
+              InputFeild(hint: "120", iconData: Icons.money, txtController: _clientPriceController, keyType: TextInputType.number, label: "Price"),
 
-                      const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+              //Duration
+              InputFeild(hint: "30", iconData: Icons.timer, txtController: _clientDurrationController, keyType: TextInputType.number, label: "Durration in MIN"),
+
+              const SizedBox(
+                height: 15,
+              ),
+
+              //Sessions
+              // case and therapist
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "\t Client`s case:",
+                          style: TextStyle(color: kPrimaryColor, fontSize: 17),
+                        ),
+                        //Case of the Client
+                        caseDropDownList(items),
+
+                        const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
 
 
-                      WeekdaySelector(
-                        firstDayOfWeek: 7,
-                        selectedElevation: 30,
-                        color :kPrimaryColor ,
-                        onChanged: (val) async {
-
-                          var now = DateTime.now();
-                          var time = await pickTime(now) as TimeOfDay;
-
-                          setState((){
+                        WeekdaySelector(
+                          firstDayOfWeek: 7,
+                          selectedElevation: 30,
+                          color :kPrimaryColor ,
+                          onChanged: (val) async {
 
                             var now = DateTime.now();
+                            var time = await pickTime(now) as TimeOfDay;
 
-                            var firstOfMonth = DateTime(now.year, now.month, val , time.hour , time.minute);
+                            setState((){
 
-                            var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday - val)) % 7);
+                              var now = DateTime.now();
 
-                            handleTimeSelection(firstDayPickedInMonth);
+                              var firstOfMonth = DateTime(now.year, now.month, val , time.hour , time.minute);
 
+                              var firstDayPickedInMonth = firstOfMonth.addCalendarDays((7 - (firstOfMonth.weekday - val)) % 7);
 
-                            print(_listOfSelectedTime);
-                          });
-                        },
-                        values: values,
-                      ),
-
-                    _listOfSelectedTime.isNotEmpty ?
-                      _listOfSelectedTimeWidget() : Container(),
+                              handleTimeSelection(firstDayPickedInMonth);
 
 
-                      const  Text(
-                        "\t Client`s therapist:",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 17),
-                      ),
+                              print(_listOfSelectedTime);
+                            });
+                          },
+                          values: values,
+                        ),
 
-                      //todo: therapist
-                       _listOftherapist.isNotEmpty
-                          ? therapistDropDownList(_listOftherapist)
-                          : Container(),
-                    ],
-                  )),
-
-            SizedBox(
-              height: 50,
-            ),
-
-            ///AddingButton
+                      _listOfSelectedTime.isNotEmpty ?
+                        _listOfSelectedTimeWidget() : Container(),
 
 
+                        const  Text(
+                          "\t Client`s therapist:",
+                          style: TextStyle(color: kPrimaryColor, fontSize: 17),
+                        ),
 
-            Center(
-              child: ElevatedButton(
+                        //todo: therapist
+                         _listOftherapist.isNotEmpty
+                            ? therapistDropDownList(_listOftherapist)
+                            : Container(),
+                      ],
+                    )),
 
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  shape: const StadiumBorder(),
-                  primary: Colors.white,
-                  elevation: 18,
-                  shadowColor: Colors.black87,
-                  // maximumSize: Size.fromWidth(500)
-                ),
-                child: const Text(
-                  "\t Add Patient \t",
-                  style:  TextStyle(
-                    color: kPrimaryColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: (){
-
-                   print("from adding page the selected time list == ${_listOfSelectedTime}");
-
-
-                    var sessionList = prepareSessionList(_listOfSelectedTime);
-
-                    print("from adding page the session list == ${sessionList}");
-                    var client =
-                    Patient(0,
-                      name : _clientNameController.text,
-                      age : int.parse(_clientAgeController.text),
-                      therapist: _clientTherapist,
-                      caseName: _clientCase,
-                      startDate: DateTime.now(),
-                      storedAt: DateTime.now(),
-                      storedBy: SharedPref.email,
-                      sessions : sessionList,
-                        Durration : int.parse(_clientDurrationController.text),
-                      price: int.parse(_clientPriceController.text),
-                      phone: int.parse(_clientPhoneController.text),
-                      gender: "male"
-                    );
-
-                    _addingVM.addClient(client);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePageScreen()));
-
-                },
+              SizedBox(
+                height: 50,
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ],
+
+              ///AddingButton
+
+
+
+              Center(
+                child: ElevatedButton(
+
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    shape: const StadiumBorder(),
+                    primary: Colors.white,
+                    elevation: 18,
+                    shadowColor: Colors.black87,
+                    // maximumSize: Size.fromWidth(500)
+                  ),
+                  child: const Text(
+                    "\t Add Patient \t",
+                    style:  TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: (){
+
+
+
+
+                      var sessionList = prepareSessionList(_listOfSelectedTime);
+
+
+                      // check all in puts
+                      if (_formKey.currentState!.validate()) {
+                          print("condition");
+                          if (_listOfSelectedTime.isEmpty){
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Please Select Session Time ')),
+                              );
+
+                          }
+                          else{
+                          var client =
+                          Patient(0,
+                            name: _clientNameController.text,
+                            age: int.parse(_clientAgeController.text),
+                            therapist: _clientTherapist,
+                            caseName: _clientCase,
+                            startDate: DateTime.now(),
+                            storedAt: DateTime.now(),
+                            storedBy: SharedPref.email,
+                            sessions: { _clientCase : sessionList},
+                            Durration: int.parse(_clientDurrationController.text),
+                            price: int.parse(_clientPriceController.text),
+                            phone: int.parse(_clientPhoneController.text),
+                            gender: _clientGender?.name ?? "male"
+                        );
+
+                        _addingVM.addClient(client);
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) => HomePageScreen()));
+                      }
+                      }
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ],
+          ),
         ),
       ),
     );

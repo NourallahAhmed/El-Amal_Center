@@ -146,6 +146,9 @@ class _HomePageState extends State<HomePage> {
             ),
 
             const SizedBox(width: 20,),
+
+
+          //MARK: passing only the list of time
           sessionsView(client.sessions) ,
 
 
@@ -161,12 +164,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget sessionsView(List<DateTime>  sessions) {
+  Widget sessionsView( Map<String, List<DateTime> > sessionsMap) {
+    print("from sessions View");
 
-    List<Widget> customRow = [];
+    print("from sessions View  ${sessionsMap.values.last}" );
+
     var sessionsOfTheDay = [];
 
+    var sessions = sessionsMap.values.last as List<DateTime>;
 
+    print("from sessions View");
+
+    print(sessions);
+
+    List<Widget> customRow = [];
     sessions.forEach((session) {
         // print("loop");
         // print(session.toLocal());
@@ -174,9 +185,6 @@ class _HomePageState extends State<HomePage> {
       if (session.day == selectedDay.day){
         // sessionsOfTheDay.add(session);
         var  time =  DateFormat('HH:mm:aa').format(session).toString();
-
-
-
         customRow.add(
                // const Icon(Icons.alarm),
                // const SizedBox(width: 15,),
@@ -186,7 +194,6 @@ class _HomePageState extends State<HomePage> {
     });
 
     return Column(
-
       children: customRow
     );
   }
