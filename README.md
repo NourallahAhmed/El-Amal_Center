@@ -15,6 +15,8 @@ It's Flutter application where the center can add patients and schedule sessions
   - Provider
   - FireBase Auth
   - FireBase RealTime DataBase
+  - FireBase DataBase
+  - FireBase Cloud Messaging
   - Table Calender Package
   - Weekly Selector Package
   
