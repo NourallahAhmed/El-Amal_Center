@@ -2,13 +2,14 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/Model/TherapistData.dart';
-import 'package:untitled/UI/AddingClient/View/Component/InputFeild.dart';
+import 'package:untitled/UI/PatientScreens/AddingClient/View/Component/InputFeild.dart';
 
-import '../../../utils/Constants.dart';
-import '../../../utils/Shared.dart';
-import '../../AddingClient/View/Component/TitlePage.dart';
-import '../../HomePage/View/homeScreen.dart';
+import '../../../../utils/Constants.dart';
+import '../../../../utils/Shared.dart';
+import '../../../PatientScreens/AddingClient/View/Component/TitlePage.dart';
+import '../../../HomePage/View/homeScreen.dart';
 import '../viewModel/AddingTherapistVM.dart';
 class AddingTherapistScreen extends StatefulWidget {
   const AddingTherapistScreen({Key? key}) : super(key: key);
@@ -95,33 +96,42 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
     return
       Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration:  BoxDecoration(
+          child:
+          Material(
+            elevation: 8,
+            shadowColor: Colors.black87,
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              decoration:  BoxDecoration(
 
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-                border:  Border.all(color: RBackgroundColor)
-            ),
-            child: DropdownButton<Specializations>(
-                isExpanded:true,
-                borderRadius: BorderRadius.circular(30),
-                value: _therapistSpecialize,
-                items:
-                Specializations.values.map((Specializations classType) {
-                  return DropdownMenuItem<Specializations>(
-                      value: classType,
-                      child: Text(classType.name.toString()));
-                }).toList(),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  border:  Border.all(color: RBackgroundColor)
+              ),
+              child:  DropdownButtonHideUnderline(
+                child: DropdownButton<Specializations>(
+                    isExpanded:true,
+                    borderRadius: BorderRadius.circular(30),
+                    value: _therapistSpecialize,
+                    items:
+                    Specializations.values.map((Specializations classType) {
+                      return DropdownMenuItem<Specializations>(
+                          value: classType,
+                          child: Text(classType.name.toString()));
+                    }).toList(),
 
-                onChanged: (value)  {
+                    onChanged: (value)  {
 
-                  var values = Specializations.values;
-                  setState((){
-                    values.contains(value) ?  this._therapistSpecialize = value!  : print("not in values ") ;
-                    print(_therapistSpecialize);
-                    print(_therapistSpecialize.runtimeType);
-                  });
-                }
+                      var values = Specializations.values;
+                      setState((){
+                        values.contains(value) ?  this._therapistSpecialize = value!  : print("not in values ") ;
+                        print(_therapistSpecialize);
+                        print(_therapistSpecialize.runtimeType);
+                      });
+                    }
+                ),
+              ),
             ),
           )
         // ),
@@ -130,9 +140,14 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
 
 
   @override
+  initState(){
+    Provider.of<AddingTherapistVM>(context , listen:  false).getAllMails();
+  }
+  @override
   Widget build(BuildContext context) {
     return
-
+      Consumer<AddingTherapistVM>(builder: (context, provider, child) {
+      return
       Scaffold(
           appBar:  AppBar(
             title:  Text("El Amal Center"),
@@ -187,14 +202,12 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
             ),
             specializationList() ,
 
-
             //Email
             InputFeild(hint: "Nour@ElAmalCenter.com",
                 iconData: Icons.mail_outline,
                 txtController: _therapistMailController,
                 keyType: TextInputType.emailAddress,
                 label: "Mail"),
-
 
             //password
             InputFeild(hint: "123dsl",
@@ -225,32 +238,42 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
                   ),
                 ),
                 onPressed: (){
+                  print("VALIDATION");
+                  var checkMail = Provider.of<AddingTherapistVM>(context , listen:  false).listOfEmails.contains(_therapistMailController.text);
+                  print("checkMail = ${checkMail}");
+                  setState((){
+
+                    Provider.of<AddingTherapistVM>(context, listen:  false).check = checkMail;
+                  });
 
                   // check all in puts
                   if (_formKey.currentState!.validate()) {
-                    print("condition");
 
-
+                    if( checkMail == false ) {
+                      print("checkMail = ${checkMail}");
                       var therapist =
                       TherapistData(
-                          name: _therapistNameController.text,
+                        name: _therapistNameController.text,
 
-                          specialization: _therapistSpecialize.name.toString(),
-                          startDate: DateTime.now(),
-                          storedAt: DateTime.now(),
-                          storedBy: SharedPref.email,
-                          sessions: sessions,
-                          phone: int.parse(_therapistPhoneController.text),
-                          gender: _therapistGender.name ?? "male",
+                        specialization: _therapistSpecialize.name.toString(),
+                        startDate: DateTime.now(),
+                        storedAt: DateTime.now(),
+                        storedBy: SharedPref.email,
+                        sessions: sessions,
+                        phone: int.parse(_therapistPhoneController.text),
+                        gender: _therapistGender.name ?? "male",
 
-                          password: _therapistPasswordController.text,
-                          mail:  _therapistMailController.text,
+                        password: _therapistPasswordController.text,
+                        mail: _therapistMailController.text,
                       );
 
                       _addingVM.addTherapist(therapist);
-                      // Navigator.pushReplacement(context, MaterialPageRoute(
-                      //     builder: (context) => HomePageScreen()));
-
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (context) => HomePageScreen()));
+                    }
+                    else{
+                      print("email Exist");
+                    }
                   }
                 },
               ),
@@ -262,5 +285,6 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
     )
 
     );
+      });
   }
 }

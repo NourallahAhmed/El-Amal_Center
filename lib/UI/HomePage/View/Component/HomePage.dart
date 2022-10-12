@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Text(
             " Welcome Back\n"
-                " ${homeVM.getCurrentUser()} ",
+                " ${SharedPref.userName} ",
             style: const TextStyle(
                 color: Colors.blueAccent,
                 fontSize: 17,
@@ -98,7 +98,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
   Widget clientRow(Patient client) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -163,7 +162,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
   Widget sessionsView( Map<String, List<DateTime> > sessionsMap) {
     print("from sessions View");
 
@@ -202,7 +200,6 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.all(0.0),
       itemBuilder: (BuildContext context, int index) {
         final Patient client = selectedList[index];
-
         return clientRow(client);
       },
       itemCount: selectedList.length,
@@ -215,9 +212,6 @@ class _HomePageState extends State<HomePage> {
           "https://ouch-cdn2.icons8.com/BbYaGQcG9qxVp4LAoSXm-fhbsTutCLjWaV2ESMk6GMI/rs:fit:256:171/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvMy82/YTk5NTJiMi1mNWVh/LTRkNDAtYjZlMi1h/ZGQzODUwYTIwMjUu/c3Zn.png"),
     );
   }
-
-
-
 
 
   @override

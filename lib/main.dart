@@ -2,17 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/Services/MyProvider.dart';
-import 'package:untitled/Services/PushNotifictionServices.dart';
-import 'package:untitled/UI/AddingClient/ViewModel/AddingClientVM.dart';
+import 'package:untitled/UI/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 import 'package:untitled/utils/Shared.dart';
-
-import 'UI/HomePage/View/Component/HomePage.dart';
 import 'UI/HomePage/View/homeScreen.dart';
 import 'UI/LoginPage/LoginView/LoginScreen.dart';
+import 'UI/TherapistScreens/AddingTherapist/viewModel/AddingTherapistVM.dart';
+import 'UI/TherapistScreens/AllTherapists/viewModel/All_TherapistVM.dart';
 import 'utils/Constants.dart';
 
 //receiving notifications in background from firebase
@@ -46,7 +43,9 @@ void main() async {
           providers: [
             ChangeNotifierProvider<LoginViewModel>(create: (_) => LoginViewModel()),
             ChangeNotifierProvider<HomePageVM>(create: (_) => HomePageVM()),
+            ChangeNotifierProvider<All_TherapistVM>(create: (_) => All_TherapistVM()),
             ChangeNotifierProvider<AddingViewModel>(create: (_) => AddingViewModel()),
+            ChangeNotifierProvider<AddingTherapistVM>(create: (_) => AddingTherapistVM()),
           ],
           child: MyApp(email: emailSaved, pass: passwordSaved))
       );

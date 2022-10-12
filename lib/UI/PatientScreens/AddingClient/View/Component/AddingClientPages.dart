@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/UI/AddingClient/View/Component/InputFeild.dart';
+import 'package:untitled/UI/PatientScreens/AddingClient/View/Component/InputFeild.dart';
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/utils/Shared.dart';
 import 'package:untitled/utils/extensions.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 import 'package:intl/intl.dart';
-import '../../../../Model/Client.dart';
-import '../../../HomePage/View/homeScreen.dart';
+import '../../../../../Model/Client.dart';
+import '../../../../HomePage/View/homeScreen.dart';
 import '../../ViewModel/AddingClientVM.dart';
 import '../../View/Component/TitlePage.dart';
-import '../../../../utils/Constants.dart';
+import '../../../../../utils/Constants.dart';
 
 class AddingClientPages extends StatefulWidget {
   const AddingClientPages({Key? key}) : super(key: key);
@@ -47,28 +47,43 @@ class _AddingClientPagesState extends State<AddingClientPages> {
     return
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: DropdownButton(
-            isExpanded:true,
-            borderRadius: BorderRadius.circular(30),
-            hint: const Text("Case"),
-            value: _clientCase,
-            items:
-              items.map((items) {
-                return DropdownMenuItem(
-                  value: items,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(items , style: TextStyle( fontSize: 17),),
-                  ),
-                );
-              }).toList(),
-          onChanged: (value){
-            setState((){
-              this._clientCase = value.toString();
-            });
-          }
+        child:        Material(
+        elevation: 8,
+        shadowColor: Colors.black87,
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        child: Container(
+        decoration:  BoxDecoration(
+
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        border:  Border.all(color: RBackgroundColor)
+        ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+                isExpanded:true,
+                borderRadius: BorderRadius.circular(30),
+                hint: const Text("Case"),
+                value: _clientCase,
+                items:
+                  items.map((items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(items , style: TextStyle( fontSize: 17),),
+                      ),
+                    );
+                  }).toList(),
+              onChanged: (value){
+                setState((){
+                  this._clientCase = value.toString();
+                });
+              }
+            ),
+          ),
         )
-    // ),
+         ),
       );
   }
 
@@ -78,27 +93,42 @@ class _AddingClientPagesState extends State<AddingClientPages> {
     return
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: DropdownButton(
-            alignment : AlignmentDirectional.center,
-            isExpanded:true,
-             borderRadius: BorderRadius.circular(20),
-            hint: const Text("Therapist"),
-            value: _clientTherapist,
-            items:
-              items.map((items) {
-                return DropdownMenuItem(
-                  value: items,
-                  child: Text(items , style:  TextStyle(color: kPrimaryColor  , fontSize: 17,),),
-                );
-              }).toList(),
+        child: Material(
+          elevation: 8,
+          shadowColor: Colors.black87,
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+              decoration:  BoxDecoration(
 
-          onChanged: (value){
-              setState((){
-                _clientTherapist = value  as String;
-              });
-          }
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  border:  Border.all(color: RBackgroundColor)
+              ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+                alignment : AlignmentDirectional.center,
+                isExpanded:true,
+                 borderRadius: BorderRadius.circular(20),
+                hint: const Text("Therapist"),
+                value: _clientTherapist,
+                items:
+                  items.map((items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items , style:  TextStyle(color: kPrimaryColor  , fontSize: 17,),),
+                    );
+                  }).toList(),
+
+              onChanged: (value){
+                  setState((){
+                    _clientTherapist = value  as String;
+                  });
+              }
+              ),
           ),
-      // )
+        ),
+        )
       );
   }
 
@@ -266,9 +296,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
               //Sessions
               // case and therapist
-                Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
+               Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -322,7 +350,8 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                             ? therapistDropDownList(_listOftherapist)
                             : Container(),
                       ],
-                    )),
+                    // )
+        ),
 
               SizedBox(
                 height: 50,

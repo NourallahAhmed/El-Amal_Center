@@ -2,10 +2,10 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/UI/AddingClient/View/Component/AddingClientPages.dart';
-import 'package:untitled/UI/AddingClient/ViewModel/AddingClientVM.dart';
+import 'package:untitled/UI/PatientScreens/AddingClient/View/Component/AddingClientPages.dart';
+import 'package:untitled/UI/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
 
-import '../../../utils/HelperFunctions.dart';
+import '../../../../utils/HelperFunctions.dart';
 
 class AddingClientScreen extends StatefulWidget {
   const AddingClientScreen({Key? key}) : super(key: key);
