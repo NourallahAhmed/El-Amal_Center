@@ -11,3 +11,9 @@ enum Gender {
   Male,
   Female,
 }
+
+
+enum Specializations {
+  Speech_Therapist,
+  Physiotherapist,
+}

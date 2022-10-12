@@ -8,6 +8,7 @@ import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 import '../../../Services/MyProvider.dart';
 import '../../../utils/HelperFunctions.dart';
 import '../../AddingClient/View/AddingClient.dart';
+import '../../AddingTherapist/view/AddingTherapistScreen.dart';
 import '../../LoginPage/LoginView/Component/CenterWidgets/centerWidegt.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -42,18 +43,18 @@ class _HomePageScreenState extends State<HomePageScreen> {
               child: Image.asset('assets/images/facebook.png'),
             ),
             ListTile(
-              title: const Text('Patients'),
+              title: const Text(' Add therapist'),
               leading: const Icon(
-                Icons.schedule,
+                Icons.person_add_alt,
                 color: Colors.blueAccent,
               ),
               onTap: () {
                 Navigator.pop(context);
 
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => MyHomePage(title: "Events")));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddingTherapistScreen()));
               },
             ),
             ListTile(

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:untitled/utils/HelperFunctions.dart';
 
 class Patient {
   int id;
@@ -44,7 +45,7 @@ Map<String, dynamic> toJson() {
     "caseName": caseName,
     "storedBy": storedBy,
     "storedAt": storedAt.millisecondsSinceEpoch,
-    "sessions": convertList(sessions),
+    "sessions": HelperFunctions.convertList(sessions),
     "startDate": startDate.millisecondsSinceEpoch,
     "price": price,
     "Durration": Durration ,
@@ -53,33 +54,6 @@ Map<String, dynamic> toJson() {
   };
 }
 
-//todo  convert list of sessions to map to firebase
-Map<String, List<int>> convertList(Map<String, List<DateTime>> upcommingMap) {
-
-  print("form Model convertSessionList => coming list  ${upcommingMap}");
-    Map<String, List<int>>  map = {};
-
-    List<int> datetimeToInt = [];
-    var key = "";
-
-    print(upcommingMap.length);
-    //loop over list of entry
-    for ( var i = 0 ; i <= upcommingMap.length -1  ; i ++) {
-      var key = upcommingMap.keys.elementAt(i);
-
-      var listOfTime = upcommingMap[key];
-
-      //loop over list of datetime
-      for (var j = 0 ; j <= listOfTime!.length -1 ; j++){
-        datetimeToInt.add(listOfTime[j].millisecondsSinceEpoch);
-      }
-      // print("befor add to map the list = ${datetimeToInt} , key = ${key}");
-      map.addAll({ key : datetimeToInt});
-    }
-
-  print("form Model convertSessionList ${map}");
-  return map;
-  }
 
 
 
