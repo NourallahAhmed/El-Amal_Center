@@ -22,7 +22,7 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
-  final _loginVM = LoginViewModel();
+
   var color = Colors.lightBlue;
   // final _homePageVM =  HomePageVM();
 
@@ -33,10 +33,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return /* ChangeNotifierProvider(
-        create: (context) => HomePageVM(),
-        child: */
-        Scaffold(
+    return Consumer(builder: (context , provider , child) {
+       return Scaffold(
       appBar: AppBar(
 
           title: const Text("El Amal Center"),
@@ -123,7 +121,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           ),
           onTap: () {
             // Navigator.pop(context);
-            _loginVM.logOut();
+            Provider.of<LoginViewModel>(context , listen: false).logOut();
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
@@ -172,5 +170,7 @@ spacing: 12,
       ),
       //  )
     );
+
+    });
   }
 }

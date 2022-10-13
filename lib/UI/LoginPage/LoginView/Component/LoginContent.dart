@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,6 @@ import 'package:untitled/utils/Shared.dart';
 import '../../../../Services/PushNotifictionServices.dart';
 import '../../../../utils/constants.dart';
 import '../../../HomePage/View/homeScreen.dart';
-
-
 
 enum Screens {
   createAccount,
@@ -25,23 +22,14 @@ class Login_Content extends StatefulWidget {
   State<Login_Content> createState() => _Login_ContentState();
 }
 
-enum txtbutton<String>{
+enum txtbutton<String> {
   SignUp,
-
   LogIn,
-
 }
 
-
-
-class _Login_ContentState extends State<Login_Content>  with TickerProviderStateMixin {
-
-
-
+class _Login_ContentState extends State<Login_Content>
+    with TickerProviderStateMixin {
   //todo ViewModel
-
-  var loginVM = LoginViewModel();
-
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var userNameController = TextEditingController();
@@ -50,9 +38,11 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
   var isStored = false;
 
   var result = "";
+
   //todo input design
 
-  Widget inputField(String hint, IconData iconData , TextEditingController txtController , TextInputType keyType) {
+  Widget inputField(String hint, IconData iconData,
+      TextEditingController txtController, TextInputType keyType) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 8),
       child: SizedBox(
@@ -65,9 +55,12 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
           child: TextField(
             keyboardType: keyType,
             controller: txtController,
-            obscureText: keyType == TextInputType.visiblePassword ?  obscure : !obscure,
-            enableSuggestions: keyType == TextInputType.visiblePassword ?  false : true,
-            autocorrect: keyType == TextInputType.visiblePassword ?  false : true,
+            obscureText:
+                keyType == TextInputType.visiblePassword ? obscure : !obscure,
+            enableSuggestions:
+                keyType == TextInputType.visiblePassword ? false : true,
+            autocorrect:
+                keyType == TextInputType.visiblePassword ? false : true,
             textAlignVertical: TextAlignVertical.bottom,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -78,19 +71,20 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
               fillColor: Colors.white,
               hintText: hint,
               prefixIcon: Icon(iconData),
-              suffixIcon: keyType == TextInputType.visiblePassword ?
-              IconButton(onPressed: () {
-                print("object");
-                setState(() {
-                  print(obscure);
-                  obscure = !obscure;
-                  print(obscure);
-                });
-              }, icon:  Icon( !obscure ?  Icons.visibility
-                : Icons.visibility_off,)
-              )  : null ,
-
-
+              suffixIcon: keyType == TextInputType.visiblePassword
+                  ? IconButton(
+                      onPressed: () {
+                        print("object");
+                        setState(() {
+                          print(obscure);
+                          obscure = !obscure;
+                          print(obscure);
+                        });
+                      },
+                      icon: Icon(
+                        !obscure ? Icons.visibility : Icons.visibility_off,
+                      ))
+                  : null,
             ),
           ),
         ),
@@ -98,79 +92,77 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
     );
   }
 
-
   //todo button design
 
-  Widget loginButton(txtbutton title ) {
-    return
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
-        child: ElevatedButton(
-          onPressed: () async {
-            //todo SignUP
-            if (title == txtbutton.SignUp) {
-              if (emailController.text.isNotEmpty  & passwordController.text.isNotEmpty){
-                var check = await loginVM.createAccount(emailController.text , passwordController.text );
-                if (check) {
-                  Navigator.pushReplacement(context,  MaterialPageRoute(
-                      builder: (context) => const HomePageScreen()));
-                  emailController.clear();
-                  userNameController.clear();
-                  passwordController.clear();
-                }
-              }
-            }
-
-            //todo Login
-            else {
-              //MARK : already have an account
-              if(title == txtbutton.LogIn){
-                // not Empty
-                print("to Login");
-                if (emailController.text.isNotEmpty & passwordController.text.isNotEmpty) {
-                  //Send to firebase Auth
-                  var check = await loginVM.login(
-                      emailController.text, passwordController.text);
-
-                  //todo check on the error and  stored data
-                  if (check){
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePageScreen()));
-                  }
-                  emailController.clear();
-                  userNameController.clear();
-                  passwordController.clear();
-
-
-                }
-                // });
-
-              }
-              else{
-                print("nothing");
-              }
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: const StadiumBorder(),
-            primary: kSecondaryColor,
-            elevation: 8,
-            shadowColor: Colors.black87,
-          ),
-          child: Text(
-            "\t ${title.name} \t",
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      );
-  }
-
+  // Widget loginButton(txtbutton title ) {
+  //   return
+  //     Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
+  //       child: ElevatedButton(
+  //         onPressed: () async {
+  //           //todo SignUP
+  //           if (title == txtbutton.SignUp) {
+  //             if (emailController.text.isNotEmpty  & passwordController.text.isNotEmpty){
+  //               var check = await loginVM.createAccount(emailController.text , passwordController.text );
+  //               if (check) {
+  //                 Navigator.pushReplacement(context,  MaterialPageRoute(
+  //                     builder: (context) => const HomePageScreen()));
+  //                 emailController.clear();
+  //                 userNameController.clear();
+  //                 passwordController.clear();
+  //               }
+  //             }
+  //           }
+  //
+  //           //todo Login
+  //           else {
+  //             //MARK : already have an account
+  //             if(title == txtbutton.LogIn){
+  //               // not Empty
+  //               print("to Login");
+  //               if (emailController.text.isNotEmpty & passwordController.text.isNotEmpty) {
+  //                 //Send to firebase Auth
+  //                 var check = await loginVM.login(
+  //                     emailController.text, passwordController.text);
+  //
+  //                 //todo check on the error and  stored data
+  //                 if (check){
+  //                   Navigator.pushReplacement(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                           builder: (context) => const HomePageScreen()));
+  //                 }
+  //                 emailController.clear();
+  //                 userNameController.clear();
+  //                 passwordController.clear();
+  //
+  //
+  //               }
+  //               // });
+  //
+  //             }
+  //             else{
+  //               print("nothing");
+  //             }
+  //           }
+  //         },
+  //         style: ElevatedButton.styleFrom(
+  //           padding: const EdgeInsets.symmetric(vertical: 14),
+  //           shape: const StadiumBorder(),
+  //           primary: kSecondaryColor,
+  //           elevation: 8,
+  //           shadowColor: Colors.black87,
+  //         ),
+  //         child: Text(
+  //           "\t ${title.name} \t",
+  //           style: const TextStyle(
+  //             fontSize: 18,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  // }
 
   //todo forget password
 
@@ -224,7 +216,6 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
     );
   }
 
-
   //todo fb and google logos
 
   Widget logos() {
@@ -233,47 +224,34 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
-
           GestureDetector(
-            onTap:() {
+            onTap: () {
               print("facebook btn");
             },
             child: Image.asset('assets/images/facebook.png'),
-
           ),
-
-
-
           const SizedBox(width: 24),
-
           GestureDetector(
-
             onTap: () {
-              loginVM.loginGmail();
+              // loginVM.loginGmail();
             },
             child: Image.asset('assets/images/google.png'),
           )
-
-
         ],
       ),
     );
   }
 
-
   //todo have account
-  Widget alreadyHaveAcc () {
+  Widget alreadyHaveAcc() {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: TextButton(
         onPressed: () {
-          setState((){
+          setState(() {
             isLogin ? isLogin = false : isLogin = true;
             isCreate ? isCreate = false : isCreate = true;
           });
-
-
         },
         child: const Text(
           'Already have account',
@@ -285,20 +263,18 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
         ),
       ),
     );
-}
+  }
 
   //todo create account
-  Widget createAccount () {
+  Widget createAccount() {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: TextButton(
         onPressed: () {
-          setState((){
+          setState(() {
             isLogin ? isLogin = false : isLogin = true;
             isCreate ? isCreate = false : isCreate = true;
           });
-
-
         },
         child: const Text(
           'Create account',
@@ -310,9 +286,7 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
         ),
       ),
     );
-}
-
-
+  }
 
   late final List<Widget> createAccountContent;
   late final List<Widget> loginContent;
@@ -320,87 +294,150 @@ class _Login_ContentState extends State<Login_Content>  with TickerProviderState
   var isLogin = true;
   var isCreate = false;
 
-
   @override
   initState() {
-
-    isStored = Provider.of<LoginViewModel>(context,listen: false).IsStored();
-
-
+    isStored = Provider.of<LoginViewModel>(context, listen: false).IsStored();
 
     createAccountContent = [
-      inputField('Username', Icons.person_outline , userNameController , TextInputType.name),
-      inputField('Email', Icons.mail_outline , emailController , TextInputType.emailAddress),
-      inputField('Password', Icons.lock  , passwordController , TextInputType.visiblePassword),
-      // Consumer<LoginViewModel>(builder: (context, provider, child) {
-      //   return LogoButtons(loginVM: provider, emailController: emailController,
-      //       passwordController: passwordController, context: context,
-      //       userNameController: userNameController, title : txtbutton.SignUp.name);
-      // }),
-      loginButton(txtbutton.SignUp),
-      orDivider(),
-      logos(),
-      alreadyHaveAcc()
+      inputField('Username', Icons.person_outline, userNameController,
+          TextInputType.name),
+      inputField('Email', Icons.mail_outline, emailController,
+          TextInputType.emailAddress),
+      inputField('Password', Icons.lock, passwordController,
+          TextInputType.visiblePassword),
+
+
     ];
     loginContent = [
-      inputField('Email', Icons.mail_outline  , emailController , TextInputType.emailAddress),
-      inputField('Password', Icons.lock , passwordController , TextInputType.visiblePassword),
-          // Consumer<LoginViewModel>(builder: (context, provider, child) {
-          // return LogoButtons(loginVM: provider, emailController: emailController,
-          // passwordController: passwordController, context: context,
-          // userNameController: userNameController, title : txtbutton.LogIn.name);
-          // }),
-      loginButton(txtbutton.LogIn),
-
-      forgotPassword(),
-      createAccount()
+      inputField('Email', Icons.mail_outline, emailController,
+          TextInputType.emailAddress),
+      inputField('Password', Icons.lock, passwordController,
+          TextInputType.visiblePassword),
     ];
 
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     print("from build ${isStored}");
-    return SingleChildScrollView(
-            child: Column(
+    return Consumer<LoginViewModel>(builder: (context ,provider , child)  {
+        return
+
+          SingleChildScrollView(
+            child: Column(children: [
+              const SizedBox(
+                height: 100,
+              ),
+
+              Text(
+                isLogin ? 'Create\nAccount' : 'Welcome\nBack',
+                style: const TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(
+                height: 50,
+              ),
+
+              Column(children: isCreate ? loginContent : createAccountContent),
+
+              Column(
                 children: [
+                  Padding(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        //todo SignUP
+                        if (isCreate  == false) {
+                          if (emailController.text.isNotEmpty &
+                          passwordController.text.isNotEmpty) {
+                            var check = await Provider.of<LoginViewModel>(context , listen: false).createAccount(
+                                emailController.text, passwordController.text);
+                            if (check) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (
+                                          context) => const HomePageScreen()));
+                              emailController.clear();
+                              userNameController.clear();
+                              passwordController.clear();
+                            }
+                          }
+                        }
 
-                  const SizedBox(
-                    height: 100,
-                  ),
+                        //todo Login
+                        else {
+                          //MARK : already have an account
+                          if (isCreate) {
+                            // not Empty
+                            print("to Login");
+                            if (emailController.text.isNotEmpty &
+                            passwordController.text.isNotEmpty) {
+                              //Send to firebase Auth
+                              var check = await Provider.of<LoginViewModel>(context , listen: false).login(
+                                  emailController.text,
+                                  passwordController.text);
 
-                  Text(
-                    isLogin
-                        ? 'Create\nAccount'
-                        : 'Welcome\nBack',
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w600,
+                              //todo check on the error and  stored data
+                              if (Provider.of<LoginViewModel>(context , listen: false).check) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        const HomePageScreen()));
+                              }
+                              emailController.clear();
+                              userNameController.clear();
+                              passwordController.clear();
+                            }
+                            // });
+
+                          } else {
+                            print("nothing");
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: const StadiumBorder(),
+                        primary: kSecondaryColor,
+                        elevation: 8,
+                        shadowColor: Colors.black87,
+                      ),
+                      child:  Text(
+                        isCreate ? "\t ${txtbutton.LogIn.name} \t" : "\t ${txtbutton.SignUp.name} \t",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
+                  )
+                ],
+              ),
 
-                  const SizedBox(
-                    height: 50,
-                  ),
+              isCreate ?
+              Column(
+                children:  [ forgotPassword(), createAccount()]
+              ) :  Column(
+                  children:  [  orDivider(),
+                    logos(),
+                    alreadyHaveAcc()]
+              ),
 
-                  Column(
-                      children:
-                      isCreate ?
-                      loginContent : createAccountContent
-                  ),
 
-
-                  CustomWidget(result: result),
-
-                ]
-            ),
+              //todo error
+              CustomWidget(result: result),
+            ]),
           );
 
-
-
+      }
+      );
   }
 }
 
@@ -422,62 +459,56 @@ class LogoButtons extends StatelessWidget {
   final TextEditingController userNameController;
   final String title;
 
-  initState()
-  {
+  initState() {
     PNServices.initInfo();
   }
+
   @override
   Widget build(BuildContext context) {
-
     print("in Loginbuttons Class");
     print(loginVM.isStored);
     return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
-    child: ElevatedButton(
-      onPressed: () async {
-        //todo SignUP
-        if (title == txtbutton.SignUp.name) {
+      padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
+      child: ElevatedButton(
+        onPressed: () async {
+          //todo SignUP
+          if (title == txtbutton.SignUp.name) {
+            print("signup");
+            loginVM.createAccount(
+                emailController.text, passwordController.text);
 
-          print("signup");
-          loginVM.createAccount(emailController.text , passwordController.text );
-
-          if (emailController.text.isNotEmpty  & passwordController.text.isNotEmpty){
+            if (emailController.text.isNotEmpty &
+                passwordController.text.isNotEmpty) {
               print(" in delayed ${loginVM.isStored}");
               print(loginVM.isStored);
 
               if (loginVM.isStored) {
                 print(SharedPref.email);
-
-
-
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                    builder: (context) => const HomePageScreen()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomePageScreen()));
                 emailController.clear();
                 userNameController.clear();
                 passwordController.clear();
               }
-
+            }
           }
-        }
 
-        //todo Login
-        else {
-          //MARK : already have an account
-          if(title == txtbutton.LogIn.name){
-            // not Empty
-            print("to Login");
-            if (emailController.text.isNotEmpty & passwordController.text.isNotEmpty) {
-              //Send to firebase Auth
-              var check = await loginVM.login(
-                  emailController.text, passwordController.text);
-
-
+          //todo Login
+          else {
+            //MARK : already have an account
+            if (title == txtbutton.LogIn.name) {
+              // not Empty
+              print("to Login");
+              if (emailController.text.isNotEmpty &
+                  passwordController.text.isNotEmpty) {
+                //Send to firebase Auth
+                var check = await loginVM.login(
+                    emailController.text, passwordController.text);
 
                 //todo check on the error and  stored data
-                if (check){
-
-
-
+                if (check) {
                   //todo we need token and  title and  body for sending notification
                   Navigator.pushReplacement(
                       context,
@@ -487,33 +518,30 @@ class LogoButtons extends StatelessWidget {
                 emailController.clear();
                 userNameController.clear();
                 passwordController.clear();
+              }
+              // });
 
-
+            } else {
+              print("nothing");
             }
-            // });
-
           }
-          else{
-            print("nothing");
-          }
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        shape: const StadiumBorder(),
-        primary: kSecondaryColor,
-        elevation: 8,
-        shadowColor: Colors.black87,
-      ),
-      child: Text(
-        "\t ${title} \t",
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+        },
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape: const StadiumBorder(),
+          primary: kSecondaryColor,
+          elevation: 8,
+          shadowColor: Colors.black87,
+        ),
+        child: Text(
+          "\t ${title} \t",
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-    ),
-      );
+    );
   }
 }
 

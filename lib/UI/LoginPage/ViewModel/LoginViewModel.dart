@@ -18,6 +18,7 @@ class LoginViewModel  with ChangeNotifier{
 
   var erroeMsg  = "" ;
   var  isStored = false;
+  var  check = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   // final GoogleSignIn _googleSignin = GoogleSignIn();
 
@@ -27,7 +28,6 @@ class LoginViewModel  with ChangeNotifier{
 
   //todo store the gmail too when it works
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Therapist/");
-
   final Firebase _firebase = Firebase();
   final Google _google = Google();
 
@@ -52,7 +52,7 @@ class LoginViewModel  with ChangeNotifier{
 
   }
 
-  Future<bool> login( String email , String password) async {
+  login( String email , String password) async {
     print("Login");
     erroeMsg = "test";
     notifyListeners();
@@ -60,7 +60,12 @@ class LoginViewModel  with ChangeNotifier{
         .catchError( ( error ) {
         print(error);
         erroeMsg = error.toString();});
-    return await storeData(email, password);
+    check = await storeData(email, password);
+    print("from lodin in VM");
+    print(SharedPref.email);
+    print(SharedPref.userName);
+    print(SharedPref.password);
+    notifyListeners();
 
   }
 
@@ -100,7 +105,11 @@ class LoginViewModel  with ChangeNotifier{
     await SharedPref.pref.setString("email", email);
     await  SharedPref.pref.setString("password", password);
     await  SharedPref.pref.setString("uniquekey", id);
+    var  pref = await SharedPreferences.getInstance();
+    SharedPref.getShared();
+    print(await pref.getString("email"));
     isStored = true;
+    check = true;
     notifyListeners();
     return isStored;
 

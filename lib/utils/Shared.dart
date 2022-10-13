@@ -4,7 +4,7 @@ class SharedPref {
 
 
   static late SharedPreferences pref;
-  static late String email;
+  static late String email ;
   static late String userName;
   static late String password;
   static var isExist = false;
