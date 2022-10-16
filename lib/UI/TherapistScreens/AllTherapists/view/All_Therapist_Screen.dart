@@ -93,7 +93,7 @@ class _All_Therapist_ScreenState extends State<All_Therapist_Screen> {
                 final therapist = Provider.of<All_TherapistVM>(context , listen: false).Therapists[index];
                 return  therapistRow(therapist);
             },
-            itemCount:  Provider.of<All_TherapistVM>(context , listen: false).Therapists.length ?? 0,
+            itemCount:  Provider.of<All_TherapistVM>(context , listen: false).Therapists.length ,
           ),
               )
           ),

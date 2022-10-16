@@ -9,6 +9,7 @@ import 'package:untitled/utils/Shared.dart';
 import '../../../../Services/PushNotifictionServices.dart';
 import '../../../../utils/constants.dart';
 import '../../../HomePage/View/homeScreen.dart';
+import '../../../PatientScreens/AddingClient/View/Component/InputFeild.dart';
 
 enum Screens {
   createAccount,
@@ -35,62 +36,11 @@ class _Login_ContentState extends State<Login_Content>
   var userNameController = TextEditingController();
   var passIcon = Icon(Icons.visibility_off);
   var obscure = true;
-  var isStored = false;
 
   var result = "";
 
   //todo input design
 
-  Widget inputField(String hint, IconData iconData,
-      TextEditingController txtController, TextInputType keyType) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 8),
-      child: SizedBox(
-        height: 50,
-        child: Material(
-          elevation: 8,
-          shadowColor: Colors.black87,
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
-          child: TextField(
-            keyboardType: keyType,
-            controller: txtController,
-            obscureText:
-                keyType == TextInputType.visiblePassword ? obscure : !obscure,
-            enableSuggestions:
-                keyType == TextInputType.visiblePassword ? false : true,
-            autocorrect:
-                keyType == TextInputType.visiblePassword ? false : true,
-            textAlignVertical: TextAlignVertical.bottom,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              hintText: hint,
-              prefixIcon: Icon(iconData),
-              suffixIcon: keyType == TextInputType.visiblePassword
-                  ? IconButton(
-                      onPressed: () {
-                        print("object");
-                        setState(() {
-                          print(obscure);
-                          obscure = !obscure;
-                          print(obscure);
-                        });
-                      },
-                      icon: Icon(
-                        !obscure ? Icons.visibility : Icons.visibility_off,
-                      ))
-                  : null,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   //todo button design
 
@@ -166,11 +116,14 @@ class _Login_ContentState extends State<Login_Content>
 
   //todo forget password
 
-  Widget forgotPassword() {
+  Widget forgotPassword( LoginViewModel provider) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+
+          provider.forgetPassword();
+        },
         child: const Text(
           'Forgot Password?',
           style: TextStyle(
@@ -296,23 +249,23 @@ class _Login_ContentState extends State<Login_Content>
 
   @override
   initState() {
-    isStored = Provider.of<LoginViewModel>(context, listen: false).IsStored();
+
 
     createAccountContent = [
-      inputField('Username', Icons.person_outline, userNameController,
-          TextInputType.name),
-      inputField('Email', Icons.mail_outline, emailController,
-          TextInputType.emailAddress),
-      inputField('Password', Icons.lock, passwordController,
-          TextInputType.visiblePassword),
+      InputFeild(  label: 'Username', iconData: Icons.person_outline,
+        keyType:TextInputType.name, txtController: userNameController , hint: "name" ),
+      InputFeild( label: 'Email', iconData: Icons.mail_outline, txtController: emailController,
+          keyType:TextInputType.emailAddress ,  hint: "name@elamalcenter.com"),
+      InputFeild( label: 'Password', iconData:Icons.lock, txtController: passwordController,
+          keyType:TextInputType.visiblePassword,hint: '*******',),
 
 
     ];
     loginContent = [
-      inputField('Email', Icons.mail_outline, emailController,
-          TextInputType.emailAddress),
-      inputField('Password', Icons.lock, passwordController,
-          TextInputType.visiblePassword),
+      InputFeild( label: 'Email', iconData: Icons.mail_outline, txtController: emailController,
+        keyType: TextInputType.emailAddress , hint: "name@elamalcenter.com"),
+      InputFeild( label: 'Password', iconData: Icons.lock,txtController: passwordController,
+          keyType:TextInputType.visiblePassword, hint: '*******',),
     ];
 
     super.initState();
@@ -320,7 +273,7 @@ class _Login_ContentState extends State<Login_Content>
 
   @override
   Widget build(BuildContext context) {
-    print("from build ${isStored}");
+
     return Consumer<LoginViewModel>(builder: (context ,provider , child)  {
         return
 
@@ -422,9 +375,12 @@ class _Login_ContentState extends State<Login_Content>
               ),
 
               isCreate ?
+
               Column(
-                children:  [ forgotPassword(), createAccount()]
-              ) :  Column(
+                children:  [ forgotPassword(provider), createAccount()]
+              ) :
+
+              Column(
                   children:  [  orDivider(),
                     logos(),
                     alreadyHaveAcc()]
@@ -440,6 +396,13 @@ class _Login_ContentState extends State<Login_Content>
       );
   }
 }
+
+
+
+
+
+
+
 
 class LogoButtons extends StatelessWidget {
   const LogoButtons({

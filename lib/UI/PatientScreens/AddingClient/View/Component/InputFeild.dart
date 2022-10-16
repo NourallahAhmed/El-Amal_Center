@@ -36,10 +36,14 @@ class InputFeild extends StatelessWidget {
                   if (value == null || value.isEmpty) {
                     return 'Please Fill this Feild';
                   }
-                  if (check == false){
-                    return keyType == TextInputType.emailAddress ?   '\t Email Exist \t' : "";
-                  }
 
+                  if( keyType == TextInputType.emailAddress ) {
+                    if (check == false) {
+                      return keyType == TextInputType.emailAddress
+                          ? '\t Email Exist \t'
+                          : "";
+                    }
+                  }
                   return null;
                 },
                 keyboardType: keyType,

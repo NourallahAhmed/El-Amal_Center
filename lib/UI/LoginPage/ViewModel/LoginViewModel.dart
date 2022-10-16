@@ -31,6 +31,7 @@ class LoginViewModel  with ChangeNotifier{
   final Firebase _firebase = Firebase();
   final Google _google = Google();
 
+  //todo CreateACcount
   Future<bool> createAccount(  String email ,   String password) async {
 
     erroeMsg = "";
@@ -52,6 +53,7 @@ class LoginViewModel  with ChangeNotifier{
 
   }
 
+  //todo Login
   login( String email , String password) async {
     print("Login");
     erroeMsg = "test";
@@ -69,7 +71,8 @@ class LoginViewModel  with ChangeNotifier{
 
   }
 
-  IsStored() => isStored;
+
+  //todo Login by Gmail
 
   Future<void> loginGmail () async {
     AuthCredential? authCredential = await _google.logIn();
@@ -77,6 +80,7 @@ class LoginViewModel  with ChangeNotifier{
 
   }
 
+  //todo LogOut
   Future<void> logOut() async{
 
 
@@ -96,6 +100,7 @@ class LoginViewModel  with ChangeNotifier{
     });
   }
 
+  //todo store email in shared perf
   Future<bool> storeData(String email , String password) async {
     print("StoreData");
     print("from bedfore storing function is Stored = ${isStored}");
@@ -119,6 +124,13 @@ class LoginViewModel  with ChangeNotifier{
 
   String getError() => erroeMsg.isNotEmpty ? erroeMsg.substring(erroeMsg.toString().lastIndexOf("]")) : "";
 
+  // todo forgetPassword
+
+  Future<void> forgetPassword() async {
+    print("in");
+
+    // await user?.updatePassword(newPassword);
+  }
 
 
 

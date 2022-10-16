@@ -22,17 +22,17 @@ class _HomePageState extends State<HomePage> {
   DateTime selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 00, 0);
   DateTime _focusedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 00, 0);
 
-  var homeVM = HomePageVM();
+
 
   late List<Patient> selectedList;
 
-  Map<DateTime, List<Patient>>? client_List;
+  Map<DateTime, List<Patient>>? selectedDaysClients;
 
   //todo handle Selection
   void _handleData(date) {
     setState(() {
       selectedDay = date;
-      selectedList = client_List?[date] ?? [];
+      selectedList = selectedDaysClients?[date] ?? [];
       print(selectedList);
     });
   }
@@ -45,15 +45,17 @@ class _HomePageState extends State<HomePage> {
     PNServices.getToken(SharedPref.email);
     PNServices.initInfo();
     print("initState()");
-      homeVM.fetchAllData();
-      selectedList = homeVM.listOfAllClients;
-      client_List = homeVM.listOfClients;
-      // selectedList = client_List?[_focusedDay] ??[];
-      // _handleData(_focusedDay);
+     Provider.of<HomePageVM>(context , listen:  false).fetchAllData();
+      selectedList = Provider.of<HomePageVM>(context , listen:  false).listOfAllClients;
+      selectedDaysClients = Provider.of<HomePageVM>(context , listen:  false).listOfClients;
+      // selectedList = selectedDaysClients?[_focusedDay] ??[];
+      _handleData(_focusedDay);
   }
 
   Widget homeCalender(){
-    return SizedBox(
+    return
+
+      SizedBox(
       height: 150,
       child: TableCalendar(
         shouldFillViewport: true,
@@ -195,7 +197,7 @@ class _HomePageState extends State<HomePage> {
       children: customRow
     );
   }
-  Widget homeList() {
+  Widget homeList(HomePageVM provider) {
     return ListView.builder(
       padding: const EdgeInsets.all(0.0),
       itemBuilder: (BuildContext context, int index) {
@@ -229,7 +231,7 @@ class _HomePageState extends State<HomePage> {
             //List of Patients
             Expanded(
               child: selectedList.isNotEmpty
-                  ? homeList()
+                  ? homeList(provider)
                   : emptyList()
             ),
           ]);

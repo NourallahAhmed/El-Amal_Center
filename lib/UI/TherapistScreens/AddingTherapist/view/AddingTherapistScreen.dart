@@ -40,11 +40,11 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
   };
 
 
-  var _addingVM = AddingTherapistVM();
+  // var _addingVM = AddingTherapistVM();
   var isCheckedMale =  false;
   var isCheckedFemale =  false;
   Widget _GenderButtons(Gender gender , bool isChecked ){
-    print("comming isChecked = ${isChecked}");
+
     return
       Material(
         elevation: 8,
@@ -55,7 +55,7 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
 
-                color:  isChecked?  Colors.greenAccent :Colors.white,
+                color:  isChecked?  Colors.blue.shade200 :Colors.white,
                 borderRadius: BorderRadius.circular(30),
                 border:  Border.all(color: RBackgroundColor)
             ),
@@ -261,13 +261,13 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
                         storedBy: SharedPref.email,
                         sessions: sessions,
                         phone: int.parse(_therapistPhoneController.text),
-                        gender: _therapistGender.name ?? "male",
+                        gender: _therapistGender.name ,
 
                         password: _therapistPasswordController.text,
                         mail: _therapistMailController.text,
                       );
 
-                      _addingVM.addTherapist(therapist);
+                      Provider.of<AddingTherapistVM>(context , listen:  false).addTherapist(therapist);
                       Navigator.pushReplacement(context, MaterialPageRoute(
                           builder: (context) => HomePageScreen()));
                     }

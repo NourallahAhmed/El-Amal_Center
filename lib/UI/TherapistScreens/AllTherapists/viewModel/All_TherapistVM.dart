@@ -25,7 +25,7 @@ class All_TherapistVM with ChangeNotifier {
     });
 
 
-
+    //todo for display
     //for a specific field
     // final allData =
     // querySnapshot.docs.map((doc) => doc.get('fieldName')).toList();
