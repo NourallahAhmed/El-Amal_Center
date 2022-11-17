@@ -31,21 +31,21 @@ class _AddCaseState extends State<AddCase> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+         Text(
           "\t Client`s case:",
-          style: TextStyle(color: kPrimaryColor, fontSize: 17),
+          style: TextStyle(color: Constants.kPrimaryColor, fontSize: 17),
         ),
         //Case of the Client
         // caseDropDownList(items),
         CaseDropDownList(cases: ["case1" , "case2"],) ,
 
-        const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+          Text("\t Sessions Schedule" ,style: TextStyle(color: Constants.kPrimaryColor , fontSize: 17),),
 
 
         WeekdaySelector(
           firstDayOfWeek: 7,
           selectedElevation: 30,
-          color :kPrimaryColor ,
+          color :Constants.kPrimaryColor ,
           onChanged: (val) async {
 
             var now = DateTime.now();
@@ -72,9 +72,9 @@ class _AddCaseState extends State<AddCase> {
         _listOfSelectedTimeWidget() : Container(),
 
 
-        const  Text(
+          Text(
           "\t Client`s therapist:",
-          style: TextStyle(color: kPrimaryColor, fontSize: 17),
+          style: TextStyle(color: Constants.kPrimaryColor, fontSize: 17),
         ),
 
         //todo: therapist
@@ -163,7 +163,7 @@ class _AddCaseState extends State<AddCase> {
 
                  color: Colors.white,
                  borderRadius: BorderRadius.circular(30),
-                 border:  Border.all(color: RBackgroundColor)
+                 border:  Border.all(color: Constants.RBackgroundColor)
              ),
              child: DropdownButtonHideUnderline(
                child: DropdownButton(
@@ -176,7 +176,7 @@ class _AddCaseState extends State<AddCase> {
                    items.map((items) {
                      return DropdownMenuItem(
                        value: items,
-                       child: Text(items , style:  TextStyle(color: kPrimaryColor  , fontSize: 17,),),
+                       child: Text(items , style:  TextStyle(color: Constants.kPrimaryColor  , fontSize: 17,),),
                      );
                    }).toList(),
 

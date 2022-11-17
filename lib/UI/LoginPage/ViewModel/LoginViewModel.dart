@@ -56,17 +56,15 @@ class LoginViewModel  with ChangeNotifier{
   //todo Login
   login( String email , String password) async {
     print("Login");
-    erroeMsg = "test";
+    erroeMsg = "";
     notifyListeners();
     UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password)
         .catchError( ( error ) {
         print(error);
-        erroeMsg = error.toString();});
+        erroeMsg = error.toString().substring(error.toString().lastIndexOf("]") + 1);
+        notifyListeners();
+        });
     check = await storeData(email, password);
-    print("from lodin in VM");
-    print(SharedPref.email);
-    print(SharedPref.userName);
-    print(SharedPref.password);
     notifyListeners();
 
   }

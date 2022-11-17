@@ -38,7 +38,7 @@ class _CaseDropDownListState extends State<CaseDropDownList> {
 
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
-                border:  Border.all(color: RBackgroundColor)
+                border:  Border.all(color: Constants.RBackgroundColor)
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton(

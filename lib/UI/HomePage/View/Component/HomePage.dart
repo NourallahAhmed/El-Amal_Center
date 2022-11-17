@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:untitled/UI/HomePage/View/Component/client_row.dart';
+import 'package:untitled/UI/HomePage/View/Component/empty_list.dart';
+import 'package:untitled/UI/HomePage/View/Component/home_title.dart';
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/utils/Shared.dart';
 import '../../../../Model/Client.dart';
@@ -22,34 +25,46 @@ class _HomePageState extends State<HomePage> {
   DateTime selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 00, 0);
   DateTime _focusedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 00, 0);
 
-
-
   late List<Patient> selectedList;
 
   Map<DateTime, List<Patient>>? selectedDaysClients;
+
+  Map<String, List<DateTime>>? clients;
 
   //todo handle Selection
   void _handleData(date) {
     setState(() {
       selectedDay = date;
       selectedList = selectedDaysClients?[date] ?? [];
-      print(selectedList);
     });
   }
 
-@override
+  @override
   initState(){
 
     //todo be in initState in home page
     PNServices.requestPermission();
+
     PNServices.getToken(SharedPref.email);
+
+
     PNServices.initInfo();
-    print("initState()");
+
+
+
+      print("initState()");
      Provider.of<HomePageVM>(context , listen:  false).fetchAllData();
+     Provider.of<HomePageVM>(context , listen:  false).fetchSpecificTherapist();
+
+
+      //MARK if the user is the admain and want to show all the client as well
       selectedList = Provider.of<HomePageVM>(context , listen:  false).listOfAllClients;
       selectedDaysClients = Provider.of<HomePageVM>(context , listen:  false).listOfClients;
-      // selectedList = selectedDaysClients?[_focusedDay] ??[];
+
       _handleData(_focusedDay);
+
+      clients = Provider.of<HomePageVM>(context , listen:  false).listOfTherapistClients;
+
   }
 
   Widget homeCalender(){
@@ -82,139 +97,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget titleOfPage(){
-  return  Container(
-      margin: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            " Welcome Back\n"
-                " ${SharedPref.userName} ",
-            style: const TextStyle(
-                color: Colors.blueAccent,
-                fontSize: 17,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget clientRow(Patient client) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-
-        elevation: 8,
-        shadowColor: Colors.black87,
-        color: RBackgroundColor,
-        borderRadius: BorderRadius.circular(30),
-        child: Row(
-
-          children: [
-            SizedBox(
-              width: 90,
-              height: 90,
-              child:    client.gender == "male" ? Image.asset('assets/images/man.png') : Image.asset('assets/images/woman.png')  ,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: [
-                Text(
-                  "${client.name}",
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
-                ),
-
-                Text(
-                  "${client.caseName}",
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
-                ),
-                Text(
-                  "Therapist: ${client.therapist.substring(0,client.therapist.lastIndexOf("@"))}",
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
-                ),
-                Text(
-                  "Durration: ${client.Durration} min",
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal , color: kSecondaryColor),
-                ),
-
-
-              ],
-            ),
-
-            const SizedBox(width: 20,),
-
-
-          //MARK: passing only the list of time
-          sessionsView(client.sessions) ,
-
-
-           /* Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active_outlined)),
-              ],
-            )*/
-          ],
-        ),
-      ),
-    );
-  }
-  Widget sessionsView( Map<String, List<DateTime> > sessionsMap) {
-    print("from sessions View");
-
-    print("from sessions View  ${sessionsMap.values.last}" );
-
-    var sessionsOfTheDay = [];
-
-    var sessions = sessionsMap.values.last as List<DateTime>;
-
-    print("from sessions View");
-
-    print(sessions);
-
-    List<Widget> customRow = [];
-    sessions.forEach((session) {
-        // print("loop");
-        // print(session.toLocal());
-        // print(selectedDay);
-      if (session.day == selectedDay.day){
-        // sessionsOfTheDay.add(session);
-        var  time =  DateFormat('HH:mm:aa').format(session).toString();
-        customRow.add(
-               // const Icon(Icons.alarm),
-               // const SizedBox(width: 15,),
-               Text("${time}" , style: TextStyle(fontSize: 15),),
-        );
-      }
-    });
-
-    return Column(
-      children: customRow
-    );
-  }
   Widget homeList(HomePageVM provider) {
     return ListView.builder(
+
       padding: const EdgeInsets.all(0.0),
+
       itemBuilder: (BuildContext context, int index) {
-        final Patient client = selectedList[index];
-        return clientRow(client);
+
+        final Patient patient = selectedList[index];
+
+        return ClientRow(patient: patient, selectedDay : selectedDay ); //todo index will indicate the index of list of date time in the map
+
       },
+
       itemCount: selectedList.length,
     );
 
   }
-  Widget emptyList(){
-    return Center(
-      child: Image.network(
-          "https://ouch-cdn2.icons8.com/BbYaGQcG9qxVp4LAoSXm-fhbsTutCLjWaV2ESMk6GMI/rs:fit:256:171/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvMy82/YTk5NTJiMi1mNWVh/LTRkNDAtYjZlMi1h/ZGQzODUwYTIwMjUu/c3Zn.png"),
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +122,7 @@ class _HomePageState extends State<HomePage> {
         return
           Column(children: [
             //Welcome
-            titleOfPage(),
+            const HomeTitle(),
 
             //Calender
             homeCalender(),
@@ -232,7 +131,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: selectedList.isNotEmpty
                   ? homeList(provider)
-                  : emptyList()
+                  : EmptyList()
             ),
           ]);
      });

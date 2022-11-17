@@ -18,13 +18,13 @@ class TitlePage extends StatelessWidget {
         children:  [
           Text(
             title,
-            style:  const TextStyle(
-                color: kPrimaryColor,
+            style:   TextStyle(
+                color: Constants.kPrimaryColor,
                 fontSize: 25,
                 fontWeight: FontWeight.bold),
           ),
           SizedBox(width: 10,),
-          icon != null ? Icon(  icon , color: kPrimaryColor, size: 50,) : Container() ,
+          icon != null ? Icon(  icon , color: Constants.kPrimaryColor, size: 50,) : Container() ,
 
         ],
       ),

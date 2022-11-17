@@ -10,53 +10,41 @@ import '../../../utils/Shared.dart';
 
 class HomePageVM with ChangeNotifier {
   //todo fetch the data related to the therpist by email
+
+  //MARK if the user is the admain and want to show all the client as well
   final List<Patient> listOfAllClients = [];
-  final List<Patient> _listOfTodaysClients = [];
+
   final Map<DateTime,List<Patient>> listOfClients = {};
 
-  Future<void> fetchAllData() async {
-    print("Fetch All Data");
 
-    var email =  SharedPref.email;
+  Map<String,List<DateTime>> listOfTherapistClients = {};
+
+
+
+  final _firebaseStore = FirebaseFirestore.instance;
+
+
+  Future<void> fetchAllData() async {
 
     final snapshot = await FirebaseDatabase.instance.ref('Client/').get();
 
     final map = snapshot.value as Map<dynamic, dynamic>;
-    print("snapShot = ${map}");
     map.forEach((key, value) {
       final client = Patient.fromMap(value);
-      print(client.name);
-      if (client.therapist == email){
-
-        print("therapist Email ${email}");
+      if (SharedPref.email == "${client.therapist}@elamalcenter.com"){
         listOfAllClients.add(client);
       }
     });
-    buildTheList(listOfAllClients);
-
-
-
-
-
-
-
-
-    // notifyListeners();
+    buildTheListForLoggedInTherapist(listOfAllClients);
   }
 
 
-  void buildTheList( List<Patient> clients){
+  void buildTheListForLoggedInTherapist( List<Patient> clients){
 
-    print("buildList");
 
     //outer Loop over the clients
     clients.forEach((client) {
-
-
-
       client.sessions.forEach((key, listOfSession) {
-
-        print("forEach in home page vm through the map string and List <DT>");
         // inner loop over the sessions for each case
         listOfSession.forEach((session) {
           if (listOfClients.containsKey(DateTime(session.year,session.month, session.day, 00, 0).toLocal())) {
@@ -79,20 +67,29 @@ class HomePageVM with ChangeNotifier {
           }
         });
       });
-
-
     });
     notifyListeners();
-    print(listOfClients);
   }
 
 
   getClientsList() => listOfAllClients;
+
 
   String? getCurrentUser() {
     var user = FirebaseAuth.instance.currentUser;
     return user != null ? user.email.toString().substring(0,user.email?.lastIndexOf("@")) : null;
   }
 
+
+  Future<void> fetchSpecificTherapist() async {
+    // for a specific field
+    var collection =  _firebaseStore.collection('Therapists');
+    final allData = await collection.doc(SharedPref.email).get();
+    print("fetchSpecficTherapist");
+    var therapistPatients = allData.data()!["sessions"];
+
+    listOfTherapistClients = therapistPatients;
+    print(therapistPatients);
+  }
 
 }

@@ -21,7 +21,7 @@ class _All_Therapist_ScreenState extends State<All_Therapist_Screen> {
         child: Material(
             elevation: 8,
             shadowColor: Colors.black87,
-            color: RBackgroundColor,
+            color: Constants.RBackgroundColor,
             borderRadius: BorderRadius.circular(30),
             child: Row(children: [
               SizedBox(
@@ -39,17 +39,17 @@ class _All_Therapist_ScreenState extends State<All_Therapist_Screen> {
                 children: [
                   Text(
                     "${therapist.name}",
-                    style: const TextStyle(
+                    style:  TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
-                        color: kSecondaryColor),
+                        color: Constants.kSecondaryColor),
                   ),
                   Text(
                     "${therapist.specialization}",
-                    style: const TextStyle(
+                    style:  TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
-                        color: kSecondaryColor),
+                        color: Constants.kSecondaryColor),
                   ),
 
 

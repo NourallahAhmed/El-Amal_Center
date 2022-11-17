@@ -37,7 +37,7 @@ class AddingViewModel  with ChangeNotifier{
       });
 
       print("before forEach");
-    therapists.forEach((element) {
+      therapists.forEach((element) {
       print("in forEach");
 
 
@@ -106,7 +106,6 @@ class AddingViewModel  with ChangeNotifier{
     print("addClient");
   }
 
-
   sendNotifiction(String patientName  , String email) async {
 
 
@@ -126,7 +125,6 @@ class AddingViewModel  with ChangeNotifier{
     }
     """, "Al Amal Center");
   }
-
 
   getUserName() =>  SharedPref.userName;
 

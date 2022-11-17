@@ -24,9 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenSize = MediaQuery
         .of(context)
         .size;
-   return/* ChangeNotifierProvider(
-        create: (context) => LoginViewModel(),
-    child: */ Scaffold(
+   return Scaffold(
         body: Stack(
           children: [
             Positioned(
@@ -44,6 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
     );
-    // );
+
   }
 }

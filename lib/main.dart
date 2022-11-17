@@ -6,7 +6,7 @@ import 'package:untitled/UI/PatientScreens/AddingClient/ViewModel/AddingClientVM
 import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
 import 'package:untitled/utils/Shared.dart';
-import 'UI/HomePage/View/homeScreen.dart';
+import 'UI/HomePage/View/home_screen.dart';
 import 'UI/LoginPage/LoginView/LoginScreen.dart';
 import 'UI/TherapistScreens/AddingTherapist/viewModel/AddingTherapistVM.dart';
 import 'UI/TherapistScreens/AllTherapists/viewModel/All_TherapistVM.dart';
@@ -68,10 +68,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme:  ThemeData(
-      scaffoldBackgroundColor: kBackgroundColor,
+      scaffoldBackgroundColor: Constants.kBackgroundColor,
 
       textTheme: Theme.of(context).textTheme.apply(
-        bodyColor: kPrimaryColor,
+        bodyColor: Constants.kPrimaryColor,
         fontFamily: 'Montserrat',
       ),
       ),

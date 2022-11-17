@@ -3,14 +3,12 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/Model/TherapistData.dart';
 import 'package:untitled/UI/PatientScreens/AddingClient/View/Component/InputFeild.dart';
-import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
-import 'package:untitled/UI/TherapistScreens/AllTherapists/viewModel/All_TherapistVM.dart';
 import 'package:untitled/utils/Shared.dart';
 import 'package:untitled/utils/extensions.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 import 'package:intl/intl.dart';
 import '../../../../../Model/Client.dart';
-import '../../../../HomePage/View/homeScreen.dart';
+import '../../../../HomePage/View/home_screen.dart';
 import '../../ViewModel/AddingClientVM.dart';
 import '../../View/Component/TitlePage.dart';
 import '../../../../../utils/Constants.dart';
@@ -80,7 +78,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:  Border.all(color: RBackgroundColor)
+                  border:  Border.all(color: Constants.RBackgroundColor)
               ),
               child:  DropdownButtonHideUnderline(
                 child: DropdownButton<Specializations>(
@@ -137,7 +135,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:  Border.all(color: RBackgroundColor)
+                  border:  Border.all(color: Constants.RBackgroundColor)
               ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
@@ -150,7 +148,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                   items.map((items) {
                     return DropdownMenuItem(
                       value: items,
-                      child: Text("${items}" , style:  TextStyle(color: kPrimaryColor  , fontSize: 17,),),
+                      child: Text("${items}" , style:  TextStyle(color: Constants.kPrimaryColor  , fontSize: 17,),),
                     );
                   }).toList(),
 
@@ -343,7 +341,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
               color:isChecked?  Colors.blue.shade200 :Colors.white,
               borderRadius: BorderRadius.circular(30),
-              border:  Border.all(color: RBackgroundColor)
+              border:  Border.all(color: Constants.RBackgroundColor)
             ),
             child:
             GestureDetector(
@@ -422,7 +420,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
 
 
               //todo Gender session
-              const  Text("\t \tGender: \t" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+              Text("\t \tGender: \t" ,style: TextStyle(color: Constants.kPrimaryColor , fontSize: 17),),
 
               const SizedBox(width: 30, height: 10,),
 
@@ -468,20 +466,20 @@ class _AddingClientPagesState extends State<AddingClientPages> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                 Text(
                   "\t Client`s case:",
-                  style: TextStyle(color: kPrimaryColor, fontSize: 17),
+                  style: TextStyle(color: Constants.kPrimaryColor, fontSize: 17),
                 ),
                 //Case of the Client
                 specializationList(),
 
-                const  Text("\t Sessions Schedule" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+                  Text("\t Sessions Schedule" ,style: TextStyle(color: Constants.kPrimaryColor , fontSize: 17),),
 
 
                 WeekdaySelector(
                   firstDayOfWeek: 7,
                   selectedElevation: 30,
-                  color :kPrimaryColor ,
+                  color : Constants.kPrimaryColor ,
                   onChanged: (val) async {
 
                     var now = DateTime.now();
@@ -508,9 +506,9 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                 _listOfSelectedTimeWidget() : Container(),
 
 
-                const  Text(
+                Text(
                   "\t Client`s therapist:",
-                  style: TextStyle(color: kPrimaryColor, fontSize: 17),
+                  style: TextStyle(color: Constants.kPrimaryColor, fontSize: 17),
                 ),
 
                 //todo: therapist
@@ -551,10 +549,10 @@ class _AddingClientPagesState extends State<AddingClientPages> {
                     shadowColor: Colors.black87,
                     // maximumSize: Size.fromWidth(500)
                   ),
-                  child: const Text(
+                  child:  Text(
                     "\t Add Patient \t",
                     style:  TextStyle(
-                      color: kPrimaryColor,
+                      color: Constants.kPrimaryColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

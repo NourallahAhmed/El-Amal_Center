@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
-import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
 import 'package:untitled/UI/LoginPage/LoginView/LoginScreen.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
-
-import '../../../Services/MyProvider.dart';
 import '../../../utils/Constants.dart';
 import '../../../utils/HelperFunctions.dart';
 import '../../PatientScreens/AddingClient/View/AddingClient.dart';
-import '../../LoginPage/LoginView/Component/CenterWidgets/centerWidegt.dart';
 import '../../TherapistScreens/AddingTherapist/view/AddingTherapistScreen.dart';
 import '../../TherapistScreens/AllTherapists/view/All_Therapist_Screen.dart';
 
@@ -24,7 +20,6 @@ class HomePageScreen extends StatefulWidget {
 class _HomePageScreenState extends State<HomePageScreen> {
 
   var color = Colors.lightBlue;
-  // final _homePageVM =  HomePageVM();
 
   @override
   initState() {}
@@ -44,8 +39,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
         DrawerHeader(
-          decoration: const BoxDecoration(
-            color: RBackgroundColor ,
+          decoration: BoxDecoration(
+            color:  Constants.RBackgroundColor ,
           ),
           child: Image.asset('assets/images/hopecenter.jpg'),
         ),

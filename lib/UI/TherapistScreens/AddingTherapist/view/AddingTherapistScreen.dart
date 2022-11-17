@@ -9,7 +9,7 @@ import 'package:untitled/UI/PatientScreens/AddingClient/View/Component/InputFeil
 import '../../../../utils/Constants.dart';
 import '../../../../utils/Shared.dart';
 import '../../../PatientScreens/AddingClient/View/Component/TitlePage.dart';
-import '../../../HomePage/View/homeScreen.dart';
+import '../../../HomePage/View/home_screen.dart';
 import '../viewModel/AddingTherapistVM.dart';
 class AddingTherapistScreen extends StatefulWidget {
   const AddingTherapistScreen({Key? key}) : super(key: key);
@@ -57,7 +57,7 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
 
                 color:  isChecked?  Colors.blue.shade200 :Colors.white,
                 borderRadius: BorderRadius.circular(30),
-                border:  Border.all(color: RBackgroundColor)
+                border:  Border.all(color: Constants.RBackgroundColor)
             ),
             child:
             GestureDetector(
@@ -107,7 +107,7 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
 
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:  Border.all(color: RBackgroundColor)
+                  border:  Border.all(color: Constants.RBackgroundColor)
               ),
               child:  DropdownButtonHideUnderline(
                 child: DropdownButton<Specializations>(
@@ -183,7 +183,7 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
             SizedBox(width: 30, height: 10,),
 
             //todo gender
-            const  Text("\t \tGender: \t" ,style: TextStyle(color: kPrimaryColor , fontSize: 17),),
+            Text("\t \tGender: \t" ,style: TextStyle(color: Constants.kPrimaryColor , fontSize: 17),),
 
             SizedBox(width: 30, height: 10,),
 
@@ -229,10 +229,10 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
                   shadowColor: Colors.black87,
                   // maximumSize: Size.fromWidth(500)
                 ),
-                child: const Text(
+                child:  Text(
                   "\t Add Therapist \t",
                   style:  TextStyle(
-                    color: kPrimaryColor,
+                    color: Constants.kPrimaryColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

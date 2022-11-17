@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
+import 'package:untitled/utils/Constants.dart';
 import 'package:untitled/utils/Shared.dart';
 import '../../../../Services/PushNotifictionServices.dart';
 import '../../../../utils/constants.dart';
-import '../../../HomePage/View/homeScreen.dart';
+import '../../../HomePage/View/home_screen.dart';
 import '../../../PatientScreens/AddingClient/View/Component/InputFeild.dart';
 
 enum Screens {
@@ -278,14 +280,19 @@ class _Login_ContentState extends State<Login_Content>
         return
 
           SingleChildScrollView(
-            child: Column(children: [
+            child: Column(
+
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+
+                children: [
               const SizedBox(
-                height: 100,
+                height: 200,
               ),
 
-              Text(
-                isLogin ? 'Create\nAccount' : 'Welcome\nBack',
-                style: const TextStyle(
+             const  Text(
+                'Welcome Back',
+                style:  TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
                 ),
@@ -295,66 +302,19 @@ class _Login_ContentState extends State<Login_Content>
                 height: 50,
               ),
 
-              Column(children: isCreate ? loginContent : createAccountContent),
-
               Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children:  loginContent ),
+
+
+              //MARK Button
+             Column(
                 children: [
                   Padding(
                     padding:
                     const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        //todo SignUP
-                        if (isCreate  == false) {
-                          if (emailController.text.isNotEmpty &
-                          passwordController.text.isNotEmpty) {
-                            var check = await Provider.of<LoginViewModel>(context , listen: false).createAccount(
-                                emailController.text, passwordController.text);
-                            if (check) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (
-                                          context) => const HomePageScreen()));
-                              emailController.clear();
-                              userNameController.clear();
-                              passwordController.clear();
-                            }
-                          }
-                        }
-
-                        //todo Login
-                        else {
-                          //MARK : already have an account
-                          if (isCreate) {
-                            // not Empty
-                            print("to Login");
-                            if (emailController.text.isNotEmpty &
-                            passwordController.text.isNotEmpty) {
-                              //Send to firebase Auth
-                              var check = await Provider.of<LoginViewModel>(context , listen: false).login(
-                                  emailController.text,
-                                  passwordController.text);
-
-                              //todo check on the error and  stored data
-                              if (Provider.of<LoginViewModel>(context , listen: false).check) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                        const HomePageScreen()));
-                              }
-                              emailController.clear();
-                              userNameController.clear();
-                              passwordController.clear();
-                            }
-                            // });
-
-                          } else {
-                            print("nothing");
-                          }
-                        }
-                      },
+                      onPressed: login,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: const StadiumBorder(),
@@ -363,7 +323,7 @@ class _Login_ContentState extends State<Login_Content>
                         shadowColor: Colors.black87,
                       ),
                       child:  Text(
-                        isCreate ? "\t ${txtbutton.LogIn.name} \t" : "\t ${txtbutton.SignUp.name} \t",
+                         "\t ${txtbutton.LogIn.name} \t",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -374,27 +334,59 @@ class _Login_ContentState extends State<Login_Content>
                 ],
               ),
 
-              isCreate ?
 
-              Column(
-                children:  [ forgotPassword(provider), createAccount()]
-              ) :
-
-              Column(
-                  children:  [  orDivider(),
-                    logos(),
-                    alreadyHaveAcc()]
-              ),
+             Column(
+                children:  [
+                  forgotPassword(provider),
+                ]
+              ) ,
 
 
               //todo error
-              CustomWidget(result: result),
+              Text(Provider.of<LoginViewModel>(context , listen: false).erroeMsg , style:  TextStyle(
+                color: Constants.errorColor,
+                fontSize: 15,
+
+              ),),
             ]),
           );
 
       }
       );
   }
+
+
+
+
+  login() async {
+    if (emailController.text.isNotEmpty &
+    passwordController.text.isNotEmpty) {
+      //Send to firebase Auth
+      await Provider.of<LoginViewModel>(context , listen: false).login(
+          emailController.text,
+          passwordController.text);
+
+      var check = Provider.of<LoginViewModel>(context , listen: false).check ;
+
+
+      //todo check on the error and  stored data
+      if (check) {
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                const HomePageScreen()));
+
+      }
+
+      emailController.clear();
+      userNameController.clear();
+      passwordController.clear();
+    }
+
+  }
+
 }
 
 
@@ -508,16 +500,3 @@ class LogoButtons extends StatelessWidget {
   }
 }
 
-class CustomWidget extends StatelessWidget {
-  const CustomWidget({
-    Key? key,
-    required this.result,
-  }) : super(key: key);
-
-  final String result;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(result);
-  }
-}
