@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/UI/HomePage/View/Component/HomePage.dart';
 import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
-import 'package:untitled/utils/Constants.dart';
 import 'package:untitled/utils/Shared.dart';
 import '../../../../Services/PushNotifictionServices.dart';
-import '../../../../utils/constants.dart';
+import '../../../../utils/Constants.dart';
 import '../../../HomePage/View/home_screen.dart';
 import '../../../PatientScreens/AddingClient/View/Component/InputFeild.dart';
 
@@ -126,12 +122,12 @@ class _Login_ContentState extends State<Login_Content>
 
           provider.forgetPassword();
         },
-        child: const Text(
+        child:  Text(
           'Forgot Password?',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: kSecondaryColor,
+            color: Constants.kSecondaryColor,
           ),
         ),
       ),
@@ -147,7 +143,7 @@ class _Login_ContentState extends State<Login_Content>
           Flexible(
             child: Container(
               height: 1,
-              color: kPrimaryColor,
+              color: Constants.kPrimaryColor,
             ),
           ),
           const Padding(
@@ -163,7 +159,7 @@ class _Login_ContentState extends State<Login_Content>
           Flexible(
             child: Container(
               height: 1,
-              color: kPrimaryColor,
+              color: Constants.kPrimaryColor,
             ),
           ),
         ],
@@ -208,12 +204,12 @@ class _Login_ContentState extends State<Login_Content>
             isCreate ? isCreate = false : isCreate = true;
           });
         },
-        child: const Text(
+        child:  Text(
           'Already have account',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: kSecondaryColor,
+            color: Constants.kSecondaryColor,
           ),
         ),
       ),
@@ -231,12 +227,12 @@ class _Login_ContentState extends State<Login_Content>
             isCreate ? isCreate = false : isCreate = true;
           });
         },
-        child: const Text(
+        child:  Text(
           'Create account',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: kSecondaryColor,
+            color: Constants.kSecondaryColor,
           ),
         ),
       ),
@@ -318,7 +314,7 @@ class _Login_ContentState extends State<Login_Content>
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: const StadiumBorder(),
-                        primary: kSecondaryColor,
+                        primary: Constants.kSecondaryColor,
                         elevation: 8,
                         shadowColor: Colors.black87,
                       ),
@@ -483,8 +479,8 @@ class LogoButtons extends StatelessWidget {
         },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: const StadiumBorder(),
-          primary: kSecondaryColor,
+          shape:  StadiumBorder(),
+          primary: Constants.kSecondaryColor,
           elevation: 8,
           shadowColor: Colors.black87,
         ),
