@@ -2,15 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/UI/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
-import 'package:untitled/UI/HomePage/ViewModel/HomePageVM.dart';
-import 'package:untitled/UI/LoginPage/ViewModel/LoginViewModel.dart';
-import 'package:untitled/utils/Shared.dart';
-import 'UI/HomePage/View/home_screen.dart';
-import 'UI/LoginPage/LoginView/LoginScreen.dart';
-import 'UI/TherapistScreens/AddingTherapist/viewModel/AddingTherapistVM.dart';
-import 'UI/TherapistScreens/AllTherapists/viewModel/All_TherapistVM.dart';
-import 'utils/Constants.dart';
+import 'package:untitled/presentation_layer/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
+import 'package:untitled/presentation_layer/HomePage/ViewModel/HomePageVM.dart';
+import 'package:untitled/presentation_layer/LoginPage/ViewModel/LoginViewModel.dart';
+import 'presentation_layer/HomePage/View/home_screen.dart';
+import 'presentation_layer/LoginPage/LoginView/LoginScreen.dart';
+import 'presentation_layer/TherapistScreens/AddingTherapist/viewModel/AddingTherapistVM.dart';
+import 'presentation_layer/TherapistScreens/AllTherapists/viewModel/All_TherapistVM.dart';
+import 'application_layer/utils/Constants.dart';
+import 'application_layer/utils/Shared.dart';
 
 //receiving notifications in background from firebase
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)  async {
