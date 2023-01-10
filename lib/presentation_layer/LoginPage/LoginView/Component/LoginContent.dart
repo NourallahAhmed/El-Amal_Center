@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/presentation_layer/LoginPage/ViewModel/LoginViewModel.dart';
+import '../../../../presentation_layer/LoginPage/ViewModel/LoginViewModel.dart';
 import '../../../../application_layer/utils/Constants.dart';
 import '../../../../data_layer/data_source/Services/PushNotifictionServices.dart';
 import '../../../../application_layer/utils/Shared.dart';

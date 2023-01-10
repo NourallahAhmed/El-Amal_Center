@@ -58,19 +58,9 @@ Map<String, dynamic> toJson() {
 
     //todo: from firebase
 
-    final sessionsMap = map["sessions"] ;
-
-    // final sessionsMap = new Map<String, dynamic>.from(map['sessions']);
-
+    final sessionsMap = map["sessions"] ; ///datetime here is
     Map <String,List<DateTime>> sessionMapDT = {};
-
-    print("toMap ${map.runtimeType}");
-    print("toMap ${sessionMapDT.runtimeType}");
-
     List<DateTime> intToDateTime = [];
-
-    var key = "";
-
 
     //loop over list of entry
     for ( var i = 0 ; i <= sessionsMap.length -1  ; i ++) {
@@ -81,12 +71,7 @@ Map<String, dynamic> toJson() {
         intToDateTime.add( DateTime.fromMillisecondsSinceEpoch(listOfInt[j]));
       }
         sessionMapDT.addAll({ key : intToDateTime});
-
     }
-
-
-    print("toMap ${sessionMapDT["case3"].runtimeType}");
-
     return Patient(0,
         therapist: map["therapist"],
         name: map["name"],

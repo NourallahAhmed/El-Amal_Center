@@ -21,6 +21,8 @@ class HomePageVM with ChangeNotifier {
   final _firebaseStore = FirebaseFirestore.instance;
 
 
+
+  /// moved to networkClient (done) except the buildTheListForLoggedInTherapist
   Future<void> fetchAllData() async {
 
     final snapshot = await FirebaseDatabase.instance.ref('Client/').get();
@@ -77,6 +79,7 @@ class HomePageVM with ChangeNotifier {
     return user != null ? user.email.toString().substring(0,user.email?.lastIndexOf("@")) : null;
   }
 
+  /// moved to networkClient (done)
 
   Future<void> fetchSpecificTherapist() async {
     // for a specific field

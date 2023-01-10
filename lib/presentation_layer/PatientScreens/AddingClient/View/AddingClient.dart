@@ -1,6 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:untitled/presentation_layer/PatientScreens/AddingClient/View/Component/AddingClientPages.dart';
+import '../../../../presentation_layer/PatientScreens/AddingClient/View/Component/AddingClientPages.dart';
 // import '../../../../application_layer/utils/HelperFunctions.dart';
 
 

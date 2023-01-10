@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/presentation_layer/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
+import '../../../../../presentation_layer/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
 import '../../../../application_layer/utils/extensions.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 import '../../../../application_layer/utils/Constants.dart';

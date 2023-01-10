@@ -24,6 +24,7 @@ class AddingTherapistVM with ChangeNotifier{
 
   }
 
+  /// moved to networkClient (done)
 
   Future<void> addTherapist(TherapistData therapist) async {
     print("CurrentUser");

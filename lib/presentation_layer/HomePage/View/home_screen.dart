@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/presentation_layer/HomePage/View/Component/HomePage.dart';
-import 'package:untitled/presentation_layer/LoginPage/LoginView/LoginScreen.dart';
-import 'package:untitled/presentation_layer/LoginPage/ViewModel/LoginViewModel.dart';
+import '../../../presentation_layer/HomePage/View/Component/HomePage.dart';
+import '../../../presentation_layer/LoginPage/LoginView/LoginScreen.dart';
+import '../../../presentation_layer/LoginPage/ViewModel/LoginViewModel.dart';
 import '../../../../application_layer/utils/Constants.dart';
 import '../../../application_layer/utils/HelperFunctions.dart';
 import '../../PatientScreens/AddingClient/View/AddingClient.dart';

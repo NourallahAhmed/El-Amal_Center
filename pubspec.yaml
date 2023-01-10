@@ -1,4 +1,4 @@
-name: untitled
+name: ElAmlCenter
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -54,10 +54,27 @@ dependencies:
   firebase_messaging: ^13.1.0
   cloud_firestore:
   flutter_speed_dial: ^6.1.0+1
+  analyzer:
+  retrofit:
+  dio:
+  json_serializable:
+  dartz: ^0.10.1
+  internet_connection_checker: ^0.0.1+4
+  pretty_dio_logger: ^1.1.1
+  freezed: ^1.1.1
+  get_it: ^7.2.0
+  lottie: ^1.2.2
+  image_picker: ^0.8.6
+  curved_navigation_bar:
+  carousel_slider: ^4.2.1
+  shimmer: ^2.0.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  retrofit_generator:
+  build_runner:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

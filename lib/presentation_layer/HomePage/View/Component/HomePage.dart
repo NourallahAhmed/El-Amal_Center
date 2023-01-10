@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:untitled/presentation_layer/HomePage/View/Component/client_row.dart';
-import 'package:untitled/presentation_layer/HomePage/View/Component/home_title.dart';
-import 'package:untitled/presentation_layer/HomePage/ViewModel/HomePageVM.dart';
+import '../../../../presentation_layer/HomePage/View/Component/client_row.dart';
+import '../../../../presentation_layer/HomePage/View/Component/home_title.dart';
+import '../../../../presentation_layer/HomePage/ViewModel/HomePageVM.dart';
 import '../../../../application_layer/utils/Shared.dart';
 import '../../../../domain_layer/Model/Client.dart';
 import '../../../../data_layer/data_source/Services/PushNotifictionServices.dart';

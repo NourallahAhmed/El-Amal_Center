@@ -34,6 +34,7 @@ class All_TherapistVM with ChangeNotifier {
     notifyListeners();
   }
 
+  /// moved to networkClient (done)
 
   Future<void> deleteTherapist( TherapistData therapist) async {
     // delete form auth and firestore

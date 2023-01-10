@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/presentation_layer/HomePage/View/Component/sessions_view.dart';
+import '../../../../presentation_layer/HomePage/View/Component/sessions_view.dart';
 
 import '../../../../domain_layer/Model/Client.dart';
 import '../../../../application_layer/utils/Constants.dart';

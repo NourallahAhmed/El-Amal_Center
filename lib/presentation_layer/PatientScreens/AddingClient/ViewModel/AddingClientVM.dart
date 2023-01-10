@@ -18,6 +18,7 @@ class AddingViewModel  with ChangeNotifier{
    String clientTherapist = "";
 
 
+   /// moved to networkClient (done) except  specialization part
   Future<void> getTherapistsMails() async {
 
       print("getAllTherapist");
@@ -56,7 +57,7 @@ class AddingViewModel  with ChangeNotifier{
       notifyListeners();
     }
 
-
+  /// moved to networkClient (done)
   Future<void> updateTherapist(TherapistData selectedTherapist, Patient patient) async{
     print("updateTherapist");
 
@@ -86,9 +87,7 @@ class AddingViewModel  with ChangeNotifier{
     // onError: (e) => print("Error getting document: $e"));
   }
 
-
-
-
+  /// moved to networkClient (done)
   Future<void> addClient(Patient patient, TherapistData selectedTherapist) async{
 
     print("addClient");
@@ -105,6 +104,8 @@ class AddingViewModel  with ChangeNotifier{
     print("addClient");
   }
 
+
+  /// moved to networkClient (done)
   sendNotifiction(String patientName  , String email) async {
 
 
