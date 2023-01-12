@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../../../../application_layer/utils/Constants.dart';
-import '../../../../domain_layer/Model/Client.dart';
-import '../../../../domain_layer/Model/TherapistData.dart';
+import '../../../../domain_layer/Model/patient.dart';
+import '../../../../domain_layer/Model/TherapistModel.dart';
 import '../../../../data_layer/data_source/Services/PushNotifictionServices.dart';
 import '../../../../application_layer/utils/Shared.dart';
 
@@ -14,7 +14,7 @@ class AddingViewModel  with ChangeNotifier{
 
   DatabaseReference _ref = FirebaseDatabase.instance.ref();
   final _firebaseStore = FirebaseFirestore.instance;
-  List<TherapistData> therapists = [];
+  List<Therapist> therapists = [];
    String clientTherapist = "";
 
 
@@ -32,7 +32,7 @@ class AddingViewModel  with ChangeNotifier{
       final  allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
       allData.forEach((element ) {
-        var th = TherapistData.fromMap(element as Map<String, dynamic>);
+        var th = Therapist.fromMap(element as Map<String, dynamic>);
         therapists.add(th);
       });
 
@@ -58,7 +58,7 @@ class AddingViewModel  with ChangeNotifier{
     }
 
   /// moved to networkClient (done)
-  Future<void> updateTherapist(TherapistData selectedTherapist, Patient patient) async{
+  Future<void> updateTherapist(Therapist selectedTherapist, Patient patient) async{
     print("updateTherapist");
 
     var toJson = patient.toJson();
@@ -88,7 +88,7 @@ class AddingViewModel  with ChangeNotifier{
   }
 
   /// moved to networkClient (done)
-  Future<void> addClient(Patient patient, TherapistData selectedTherapist) async{
+  Future<void> addClient(Patient patient, Therapist selectedTherapist) async{
 
     print("addClient");
     DatabaseReference _databaseReference = FirebaseDatabase.instance.ref("Client/");

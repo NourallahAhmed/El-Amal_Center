@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../../domain_layer/Model/TherapistData.dart';
+import '../../../../../domain_layer/Model/TherapistModel.dart';
 import '../../../../../presentation_layer/PatientScreens/AddingClient/View/Component/InputFeild.dart';
 import '../../../../../application_layer/utils/Constants.dart';
 import '../../../../../application_layer/utils/Shared.dart';
 import '../../../../../application_layer/utils/extensions.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 import 'package:intl/intl.dart';
-import '../../../../../domain_layer/Model/Client.dart';
+import '../../../../../domain_layer/Model/patient.dart';
 import '../../../../HomePage/View/home_screen.dart';
 import '../../ViewModel/AddingClientVM.dart';
 import '../../View/Component/TitlePage.dart';
@@ -34,8 +34,8 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   var totalCases = 1;
   var isTimeSelected = false;
 
-  late TherapistData selectedTherapist ;
-  late List<TherapistData> _listOftherapist ;
+  late Therapist selectedTherapist ;
+  late List<Therapist> _listOftherapist ;
   
   
   List<DateTime> _listOfSelectedTime = [];
@@ -111,7 +111,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
       );
   }
 
-  Widget therapistDropDownList( AddingViewModel provider, List<TherapistData?> specificList ){
+  Widget therapistDropDownList( AddingViewModel provider, List<Therapist?> specificList ){
       // _clientTherapist =  items.isNotEmpty ? items[0] : "";
 
       print(specificList.length);
@@ -381,7 +381,7 @@ class _AddingClientPagesState extends State<AddingClientPages> {
   initState(){
 
     Provider.of<AddingViewModel>(context , listen:  false).getTherapistsMails();
-    _listOftherapist =  Provider.of<AddingViewModel>(context , listen:  false).therapists.cast<TherapistData>();
+    _listOftherapist =  Provider.of<AddingViewModel>(context , listen:  false).therapists.cast<Therapist>();
     _clientTherapist = Provider.of<AddingViewModel>(context , listen:  false).clientTherapist;
 
     print("initState");

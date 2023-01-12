@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../domain_layer/Model/TherapistData.dart';
+import '../../../../domain_layer/Model/TherapistModel.dart';
 import '../../../../application_layer/utils/Constants.dart';
 import '../viewModel/All_TherapistVM.dart';
 
@@ -15,7 +15,7 @@ class All_Therapist_Screen extends StatefulWidget {
 class _All_Therapist_ScreenState extends State<All_Therapist_Screen> {
   var  alltTherapistsList = [];
 
-  Widget therapistRow(TherapistData therapist) {
+  Widget therapistRow(Therapist therapist) {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Material(

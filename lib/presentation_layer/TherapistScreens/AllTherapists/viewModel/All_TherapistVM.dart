@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../../domain_layer/Model/TherapistData.dart';
+import '../../../../domain_layer/Model/TherapistModel.dart';
 
 class All_TherapistVM with ChangeNotifier {
 
-  List<TherapistData> Therapists = [];
+  List<Therapist> Therapists = [];
 
   final _firebaseStore = FirebaseFirestore.instance;
   Future<void> getAllTherapist() async {
@@ -20,7 +20,7 @@ class All_TherapistVM with ChangeNotifier {
     final  allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
     allData.forEach((element ) {
-    var th = TherapistData.fromMap(element as Map<String, dynamic>);
+    var th = Therapist.fromMap(element as Map<String, dynamic>);
     Therapists.add(th);
     });
 
@@ -36,7 +36,7 @@ class All_TherapistVM with ChangeNotifier {
 
   /// moved to networkClient (done)
 
-  Future<void> deleteTherapist( TherapistData therapist) async {
+  Future<void> deleteTherapist( Therapist therapist) async {
     // delete form auth and firestore
      print("deleteTherapist");
     //from Auth

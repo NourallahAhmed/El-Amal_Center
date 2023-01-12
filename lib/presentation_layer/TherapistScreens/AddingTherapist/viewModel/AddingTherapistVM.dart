@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../../domain_layer/Model/TherapistData.dart';
+import '../../../../domain_layer/Model/TherapistModel.dart';
 
 class AddingTherapistVM with ChangeNotifier{
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,7 +17,7 @@ class AddingTherapistVM with ChangeNotifier{
     final  allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
     allData.forEach((element ) {
-    var th = TherapistData.fromMap(element as Map<String, dynamic>);
+    var th = Therapist.fromMap(element as Map<String, dynamic>);
     listOfEmails .add(th.mail);
     });
     notifyListeners();
@@ -26,7 +26,7 @@ class AddingTherapistVM with ChangeNotifier{
 
   /// moved to networkClient (done)
 
-  Future<void> addTherapist(TherapistData therapist) async {
+  Future<void> addTherapist(Therapist therapist) async {
     print("CurrentUser");
     print(_auth.currentUser?.email.toString());
     //todo -> store in firebaseDatabase

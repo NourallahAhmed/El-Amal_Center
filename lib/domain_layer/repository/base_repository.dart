@@ -1,25 +1,27 @@
-import '../../domain_layer/Model/Client.dart';
-import '../../domain_layer/Model/TherapistData.dart';
+import '../../data_layer/model/patient_response.dart';
+import '../../data_layer/model/therapist_response.dart';
+import '../../domain_layer/Model/patient.dart';
+import '../../domain_layer/Model/TherapistModel.dart';
 import 'package:dartz/dartz.dart';
 import '../../data_layer/data_source/network/failure.dart';
 
 abstract class BaseRepository{
 
-  Future<Either<Failure,Patient>> fetchClient();
-  Future<Either<Failure,TherapistData>> fetchTherapist();
+  Future<Either<Failure,Patient>> fetchPatient();
+  Future<Either<Failure,Therapist>> fetchTherapist();
 
-  Future<Either<Failure,List<TherapistData>>> fetchAllTherapists();
-  Future<Either<Failure,List<Patient>>> fetchAllClients();
+  Future<Either<Failure,List<Therapist>>> fetchAllTherapists();
+  Future<Either<Failure,List<Patient>>> fetchAllPatients();
 
-  Future<Either<Failure,Patient>> editClient();
-  Future<Either<Failure,TherapistData>> editTherapist();
+  Future<Either<Failure,Patient>> editPatient();
+  Future<Either<Failure,Therapist>> editTherapist(TherapistResponse therapistResponse);
 
 
-  Future<Either<Failure,Patient>> deleteClient();
-  Future<Either<Failure,TherapistData>> deleteTherapist();
+  Future<Either<Failure,Patient>> deletePatient();
+  Future<Either<Failure,Therapist>> deleteTherapist( TherapistResponse therapistResponse);
 
-  Future<Either<Failure,Patient>> addClient();
-  Future<Either<Failure,TherapistData>> addTherapist();
+  Future<Either<Failure,Patient>> addPatient(PatientResponse patientResponse , TherapistResponse therapistResponse);
+  Future<Either<Failure,Therapist>> addTherapist(TherapistResponse therapistResponse);
 
-  Future<Either<Failure,dynamic>> sendNotification();
+  Future sendNotification(String patientName , String therapistEmail);
 }

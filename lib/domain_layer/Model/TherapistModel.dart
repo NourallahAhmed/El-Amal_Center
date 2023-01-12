@@ -1,7 +1,7 @@
 
 import '../../application_layer/utils/HelperFunctions.dart';
 
-class TherapistData {
+class Therapist {
 
 
   String specialization;
@@ -17,7 +17,7 @@ class TherapistData {
   String gender;
 
 
-  TherapistData(
+  Therapist(
       {required this.specialization,
         required this.name,
         required this.storedAt,
@@ -51,7 +51,7 @@ class TherapistData {
 
 
   ///from snapshot
-  factory TherapistData.fromMap(Map<dynamic, dynamic> map) {
+  factory Therapist.fromMap(Map<dynamic, dynamic> map) {
 
     //todo: from firebase
 
@@ -84,7 +84,7 @@ class TherapistData {
 
     print("TherapistData toMap ${sessionMapDT["case3"].runtimeType}");
 
-    return TherapistData(
+    return Therapist(
        mail:  map["mail"],
        password:  map["password"],
         specialization: map["specialization"],

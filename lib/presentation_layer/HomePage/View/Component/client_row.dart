@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../presentation_layer/HomePage/View/Component/sessions_view.dart';
 
-import '../../../../domain_layer/Model/Client.dart';
+import '../../../../domain_layer/Model/patient.dart';
 import '../../../../application_layer/utils/Constants.dart';
 
 class ClientRow extends StatelessWidget {

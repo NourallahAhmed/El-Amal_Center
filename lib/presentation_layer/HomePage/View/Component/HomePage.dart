@@ -5,7 +5,7 @@ import '../../../../presentation_layer/HomePage/View/Component/client_row.dart';
 import '../../../../presentation_layer/HomePage/View/Component/home_title.dart';
 import '../../../../presentation_layer/HomePage/ViewModel/HomePageVM.dart';
 import '../../../../application_layer/utils/Shared.dart';
-import '../../../../domain_layer/Model/Client.dart';
+import '../../../../domain_layer/Model/patient.dart';
 import '../../../../data_layer/data_source/Services/PushNotifictionServices.dart';
 
 

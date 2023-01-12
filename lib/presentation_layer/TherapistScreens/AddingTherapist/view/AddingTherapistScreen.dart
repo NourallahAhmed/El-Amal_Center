@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../domain_layer/Model/TherapistData.dart';
+import '../../../../domain_layer/Model/TherapistModel.dart';
 import '../../../../presentation_layer/PatientScreens/AddingClient/View/Component/InputFeild.dart';
 import '../../../../application_layer/utils/Constants.dart';
 import '../../../../application_layer/utils/Shared.dart';
@@ -248,7 +248,7 @@ class _AddingTherapistScreenState extends State<AddingTherapistScreen> {
                     if( checkMail == false ) {
                       print("checkMail = ${checkMail}");
                       var therapist =
-                      TherapistData(
+                      Therapist(
                         name: _therapistNameController.text,
 
                         specialization: _therapistSpecialize.name.toString(),
