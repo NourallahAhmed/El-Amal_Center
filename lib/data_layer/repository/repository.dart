@@ -173,4 +173,24 @@ class Repository implements BaseRepository {
 
     }
   }
+
+  @override
+  Future<Either<Failure, List<Patient>>> fetchAllPatientsForCurrentTherapist() async {
+    if (await _networkChecker.isConnected) {
+      Failure? failure;
+      List<Patient> allPatients = [];
+      var result = await _baseRemoteDataSource
+          .fetchAllPatientsForSpecificTherapist(""); //todo : do i have to pass email that sored in  shared pref from use case or not
+      result.fold((l) => failure = l,
+              (r) => r.map((patient) => allPatients.add(patient.toDomain())));
+
+      if (result.isLeft()) {
+        return Left(failure!);
+      } else {
+        return Right(allPatients);
+      }
+    } else {
+      return Left(Failure(404, "no Internet Connection"));
+    }
+  }
 }

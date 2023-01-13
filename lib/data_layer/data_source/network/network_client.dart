@@ -88,8 +88,9 @@ class NetworkClient extends BaseNetworkClient {
 
     if (snapshot.exists) {
       final allPatients = snapshot.value as Map<dynamic, dynamic>;
-
+      print("allPatients  : $allPatients");
       allPatients.forEach((key, value) {
+        print("Value = $value");
         final patient = PatientResponse.fromJson(value);
         if (SharedPref.email == "${patient.therapist}@elamalcenter.com") {
           listOfPatientsForCurrentTherapist.add(patient);

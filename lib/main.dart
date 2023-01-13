@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ElAmlCenter/presentation_layer/PatientScreens/AddingClient/ViewModel/AddingClientVM.dart';
 import 'package:ElAmlCenter/presentation_layer/HomePage/ViewModel/HomePageVM.dart';
 import 'package:ElAmlCenter/presentation_layer/LoginPage/ViewModel/LoginViewModel.dart';
+import 'application_layer/utils/dependency_injection.dart';
 import 'presentation_layer/HomePage/View/home_screen.dart';
 import 'presentation_layer/LoginPage/LoginView/LoginScreen.dart';
 import 'presentation_layer/TherapistScreens/AddingTherapist/viewModel/AddingTherapistVM.dart';
@@ -20,8 +21,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)  async {
 void main() async {
   /// for async await
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp();
+
+  /// as refactor
+  initAppModule();
+  //todo: build route manager
+  initHomeModule();
+
+
+
 
   //for push notification
 
@@ -42,7 +50,7 @@ void main() async {
       MultiProvider(
           providers: [
             ChangeNotifierProvider<LoginViewModel>(create: (_) => LoginViewModel()),
-            ChangeNotifierProvider<HomePageVM>(create: (_) => HomePageVM()),
+            ChangeNotifierProvider<HomePageVM>(create: (_) => instance<HomePageVM>()),
             ChangeNotifierProvider<All_TherapistVM>(create: (_) => All_TherapistVM()),
             ChangeNotifierProvider<AddingViewModel>(create: (_) => AddingViewModel()),
             ChangeNotifierProvider<AddingTherapistVM>(create: (_) => AddingTherapistVM()),

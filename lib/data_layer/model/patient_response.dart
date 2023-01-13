@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'patient_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PatientResponse {
   @JsonKey(name: "id")
   int id;

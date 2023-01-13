@@ -44,6 +44,8 @@ abstract class BaseRemoteDataSource {
   /// send notification
   Future sendNotification(
       String patientName, String therapistEmail);
+
+  Future<Either<Failure , List<PatientResponse>>>fetchAllPatientsForSpecificTherapist(String email);
 }
 
 class RemoteDataSource extends BaseRemoteDataSource {
@@ -181,6 +183,22 @@ class RemoteDataSource extends BaseRemoteDataSource {
       result.isLeft() ? result.fold((l) => failure = l, (r) => null) : null;
 
       return result.isRight() ? Right(listOfTherapists) : Left(failure!);
+    } else {
+      return Left(Failure(0, "No internet Connection"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PatientResponse>>> fetchAllPatientsForSpecificTherapist(String email) async {
+    if (await _networkChecker.isConnected) {
+      Failure? failure;
+      List<PatientResponse> listOfPatients = [];
+      var result = await _networkClient.fetchPatientsForCurrentTherapist();
+
+      result.fold((l) => failure = l, (r) => r.map((patient) => listOfPatients.add(patient)));
+      result.isLeft() ? result.fold((l) => failure = l, (r) => null) : null;
+
+      return result.isRight() ? Right(listOfPatients) : Left(failure!);
     } else {
       return Left(Failure(0, "No internet Connection"));
     }

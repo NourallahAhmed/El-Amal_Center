@@ -13,6 +13,8 @@ abstract class BaseRepository{
   Future<Either<Failure,List<Therapist>>> fetchAllTherapists();
   Future<Either<Failure,List<Patient>>> fetchAllPatients();
 
+  Future<Either<Failure,List<Patient>>> fetchAllPatientsForCurrentTherapist();
+
   Future<Either<Failure,Patient>> editPatient();
   Future<Either<Failure,Therapist>> editTherapist(TherapistResponse therapistResponse);
 

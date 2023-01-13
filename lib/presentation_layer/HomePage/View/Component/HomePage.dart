@@ -53,8 +53,8 @@ class _HomePageState extends State<HomePage> {
 
 
       print("initState()");
-     Provider.of<HomePageVM>(context , listen:  false).fetchAllData();
-     Provider.of<HomePageVM>(context , listen:  false).fetchSpecificTherapist();
+     Provider.of<HomePageVM>(context , listen:  false).start();
+     // Provider.of<HomePageVM>(context , listen:  false).fetchSpecificTherapist();
 
 
       //MARK if the user is the admain and want to show all the client as well
